@@ -6,9 +6,19 @@ const DEFAULT_IMAGES = {
 } as const;
 
 function blobUrl(fileName: string) {
-  const base = process.env.NEXT_PUBLIC_BLOB_BASE_URL;
+  const base = process.env.NEXT_PUBLIC_BLOB_BASE_URL?.trim();
   if (!base) return null;
   return `${base.replace(/\/$/, "")}/${fileName}`;
+}
+
+function siteUrl() {
+  const explicit = process.env.NEXT_PUBLIC_SITE_URL?.trim();
+  if (explicit) return explicit;
+
+  const vercel = process.env.VERCEL_URL?.trim();
+  if (vercel) return `https://${vercel}`;
+
+  return "https://guadalupevazquez.com";
 }
 
 export const images = {
@@ -20,8 +30,8 @@ export const images = {
 
 export const site = {
   name: "Guadalupe Vázquez",
-  email: process.env.NEXT_PUBLIC_EMAIL ?? "contacto@guadalupevazquez.com",
-  instagram: process.env.NEXT_PUBLIC_INSTAGRAM_URL ?? "",
-  youtube: process.env.NEXT_PUBLIC_YOUTUBE_URL ?? "",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://guadalupevazquez.com",
+  email: process.env.NEXT_PUBLIC_EMAIL?.trim() || "contacto@guadalupevazquez.com",
+  instagram: process.env.NEXT_PUBLIC_INSTAGRAM_URL?.trim() ?? "",
+  youtube: process.env.NEXT_PUBLIC_YOUTUBE_URL?.trim() ?? "",
+  url: siteUrl(),
 };

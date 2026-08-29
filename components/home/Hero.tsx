@@ -33,6 +33,8 @@ export function Hero() {
             alt="Guadalupe Vázquez"
             width={180}
             height={180}
+            preload
+            loading="eager"
             className="mx-auto h-20 w-auto animate-float mix-blend-screen md:h-28"
           />
         </motion.div>

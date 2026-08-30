@@ -11,6 +11,8 @@ export function Essence() {
           src={images.inspo2}
           alt=""
           fill
+          preload
+          loading="eager"
           className="object-cover opacity-10"
           sizes="100vw"
         />

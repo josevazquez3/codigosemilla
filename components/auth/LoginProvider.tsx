@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useMemo, useState } from "react";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { LoginModal } from "@/components/auth/LoginModal";
 
 type LoginContextValue = {
@@ -11,12 +11,17 @@ const LoginContext = createContext<LoginContextValue | null>(null);
 
 export function LoginProvider({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const value = useMemo(() => ({ openLogin: () => setOpen(true) }), []);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
     <LoginContext.Provider value={value}>
       {children}
-      <LoginModal open={open} onClose={() => setOpen(false)} />
+      {mounted ? <LoginModal open={open} onClose={() => setOpen(false)} /> : null}
     </LoginContext.Provider>
   );
 }

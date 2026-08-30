@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
 import { Outfit, Playfair_Display } from "next/font/google";
-import { Footer } from "@/components/layout/Footer";
-import { Header } from "@/components/layout/Header";
 import { LoginProvider } from "@/components/auth/LoginProvider";
 import { site } from "@/lib/images";
 import "./globals.css";
@@ -53,11 +51,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${outfit.variable} ${playfair.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col bg-background font-sans text-foreground">
-        <LoginProvider>
-          <Header />
-          <main className="flex-1">{children}</main>
-          <Footer />
-        </LoginProvider>
+        <LoginProvider>{children}</LoginProvider>
       </body>
     </html>
   );

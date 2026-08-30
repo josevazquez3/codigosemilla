@@ -47,11 +47,24 @@ export function LoginModal({ open, onClose }: LoginModalProps) {
     event.preventDefault();
     setLoading(true);
     setMessage("");
-    await new Promise((resolve) => setTimeout(resolve, 600));
-    setLoading(false);
-    setMessage(
-      "El acceso a membresía se está preparando. Escribime para habilitar tu espacio.",
-    );
+    try {
+      const response = await fetch("/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      const data = (await response.json().catch(() => ({}))) as { error?: string };
+      if (!response.ok) {
+        setMessage(data.error || "No se pudo ingresar. Intentá de nuevo.");
+        setLoading(false);
+        return;
+      }
+      const next = new URLSearchParams(window.location.search).get("next");
+      window.location.href = next?.startsWith("/panel") ? next : "/panel";
+    } catch {
+      setMessage("No se pudo ingresar. Intentá de nuevo.");
+      setLoading(false);
+    }
   }
 
   const isLogin = mode === "login";

@@ -92,6 +92,12 @@ export async function saveContactMessage(input: {
   const sql = getSql();
   if (!sql) {
     console.info("[contact] DATABASE_URL no configurada. Mensaje no persistido:", input);
+    try {
+      const { createApplication } = await import("@/lib/panel-data");
+      await createApplication(input);
+    } catch {
+      /* el panel en memoria se actualiza si está disponible */
+    }
     return { persisted: false };
   }
 
@@ -100,6 +106,12 @@ export async function saveContactMessage(input: {
     INSERT INTO contact_messages (name, email, interest, message)
     VALUES (${input.name}, ${input.email}, ${input.interest}, ${input.message})
   `;
+  try {
+    const { createApplication } = await import("@/lib/panel-data");
+    await createApplication(input);
+  } catch {
+    /* el panel se actualiza cuando la base está disponible */
+  }
   return { persisted: true };
 }
 

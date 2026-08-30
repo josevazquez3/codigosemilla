@@ -17,6 +17,7 @@ export function PageHero({ image, eyebrow, title, children }: PageHeroProps) {
           alt=""
           fill
           preload
+          loading="eager"
           className="object-cover"
           sizes="100vw"
         />

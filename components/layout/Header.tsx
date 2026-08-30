@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { navItems } from "@/lib/content";
 import { Logo } from "@/components/ui/Logo";
@@ -28,9 +27,7 @@ export function Header() {
   }, [pathname]);
 
   return (
-    <motion.header
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
+    <header
       className={`fixed top-0 right-0 left-0 z-50 transition-all duration-500 ${
         solid ? "bg-primary/95 shadow-lg backdrop-blur-md" : "bg-transparent"
       }`}
@@ -76,55 +73,37 @@ export function Header() {
           {open ? <X size={22} /> : <Menu size={22} />}
         </button>
       </div>
-      <AnimatePresence>
-        {open ? (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="overflow-hidden bg-primary/98 lg:hidden"
-          >
-            <nav className="flex flex-col gap-2 px-6 py-6">
-              {navItems.map((item, index) => (
-                <motion.div
-                  key={item.path}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.05 }}
-                >
-                  <Link
-                    href={item.path}
-                    className={`block py-2 text-2xl font-heading font-light tracking-wider ${
-                      pathname === item.path
-                        ? "text-accent"
-                        : "text-primary-foreground/80 hover:text-accent"
-                    }`}
-                  >
-                    {item.label}
-                  </Link>
-                </motion.div>
-              ))}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: navItems.length * 0.05 }}
-                className="pt-4"
+      {open ? (
+        <div className="overflow-hidden bg-primary/98 lg:hidden">
+          <nav className="flex flex-col gap-2 px-6 py-6">
+            {navItems.map((item) => (
+              <Link
+                key={item.path}
+                href={item.path}
+                className={`block py-2 text-2xl font-heading font-light tracking-wider ${
+                  pathname === item.path
+                    ? "text-accent"
+                    : "text-primary-foreground/80 hover:text-accent"
+                }`}
               >
-                <button
-                  type="button"
-                  onClick={() => {
-                    setOpen(false);
-                    openLogin();
-                  }}
-                  className="inline-flex rounded-full bg-accent px-6 py-3 text-sm font-medium tracking-widest text-accent-foreground uppercase"
-                >
-                  Ingresar
-                </button>
-              </motion.div>
-            </nav>
-          </motion.div>
-        ) : null}
-      </AnimatePresence>
-    </motion.header>
+                {item.label}
+              </Link>
+            ))}
+            <div className="pt-4">
+              <button
+                type="button"
+                onClick={() => {
+                  setOpen(false);
+                  openLogin();
+                }}
+                className="inline-flex rounded-full bg-accent px-6 py-3 text-sm font-medium tracking-widest text-accent-foreground uppercase"
+              >
+                Ingresar
+              </button>
+            </div>
+          </nav>
+        </div>
+      ) : null}
+    </header>
   );
 }

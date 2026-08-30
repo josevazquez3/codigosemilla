@@ -1,7 +1,10 @@
 import Link from "next/link";
 import { Mail } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
+import { WhatsAppIcon } from "@/components/ui/WhatsAppIcon";
 import { site } from "@/lib/images";
+import { getSettings } from "@/lib/panel-data";
+import { whatsappUrl } from "@/lib/site-settings";
 
 const programs = [
   { href: "/codigo-semilla", label: "Código Semilla" },
@@ -11,7 +14,10 @@ const programs = [
   { href: "/experiencias-individuales#carta-numerologica", label: "Carta Numerológica" },
 ];
 
-export function Footer() {
+export async function Footer() {
+  const settings = await getSettings();
+  const wa = whatsappUrl(settings.whatsappNumber, settings.messageContact);
+
   return (
     <footer className="bg-primary text-primary-foreground">
       <div className="mx-auto max-w-6xl px-6 py-16">
@@ -59,6 +65,17 @@ export function Footer() {
                   aria-label="YouTube"
                 >
                   <YoutubeIcon />
+                </a>
+              ) : null}
+              {wa ? (
+                <a
+                  href={wa}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex h-10 w-10 items-center justify-center rounded-full border border-primary-foreground/20 transition-all hover:border-accent hover:bg-accent hover:text-accent-foreground"
+                  aria-label="WhatsApp"
+                >
+                  <WhatsAppIcon />
                 </a>
               ) : null}
               <a

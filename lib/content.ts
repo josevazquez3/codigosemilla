@@ -73,6 +73,7 @@ export const testimonials = [
 ] as const;
 
 export const contactInterests = [
+  "Quiero unirme",
   "Código Semilla",
   "Frecuencia 44",
   "Registros Akáshicos",

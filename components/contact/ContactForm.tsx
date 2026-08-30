@@ -3,14 +3,24 @@
 import { useState } from "react";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { contactInterests } from "@/lib/content";
+import { applyTemplate, splitName } from "@/lib/site-settings";
 
-export function ContactForm() {
+export function ContactForm({
+  whatsappHref,
+  joinTemplate,
+  platformNumber,
+}: {
+  whatsappHref?: string;
+  joinTemplate?: string;
+  platformNumber?: string;
+}) {
   const [sent, setSent] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [form, setForm] = useState({
     name: "",
     email: "",
+    phone: "",
     message: "",
     interest: "",
   });
@@ -38,13 +48,37 @@ export function ContactForm() {
   }
 
   if (sent) {
+    const joinConfirmation =
+      form.interest === "Quiero unirme" && joinTemplate
+        ? applyTemplate(joinTemplate, {
+            ...splitName(form.name),
+            celular: form.phone,
+            numeroPlataforma: platformNumber ?? "",
+          })
+        : "";
     return (
       <div className="py-20 text-center">
         <CheckCircle2 className="mx-auto mb-6 h-16 w-16 text-accent" />
         <h2 className="mb-4 font-heading text-3xl">Mensaje enviado</h2>
-        <p className="text-muted-foreground">
-          Gracias por escribirme. Te respondo a la brevedad.
-        </p>
+        {joinConfirmation ? (
+          <p className="mx-auto max-w-xl whitespace-pre-wrap text-left text-muted-foreground">
+            {joinConfirmation}
+          </p>
+        ) : (
+          <p className="text-muted-foreground">
+            Gracias por escribirme. Te respondo a la brevedad.
+          </p>
+        )}
+        {whatsappHref ? (
+          <a
+            href={whatsappHref}
+            target="_blank"
+            rel="noreferrer"
+            className="mt-6 inline-flex text-sm text-accent"
+          >
+            Seguir por WhatsApp →
+          </a>
+        ) : null}
       </div>
     );
   }
@@ -85,6 +119,15 @@ export function ContactForm() {
         value={form.email}
         onChange={(value) => setForm((current) => ({ ...current, email: value }))}
       />
+      {form.interest === "Quiero unirme" ? (
+        <FloatingField
+          id="phone"
+          type="tel"
+          label="Tu celular"
+          value={form.phone}
+          onChange={(value) => setForm((current) => ({ ...current, phone: value }))}
+        />
+      ) : null}
       <div className="relative">
         <textarea
           id="message"
@@ -105,6 +148,16 @@ export function ContactForm() {
         </label>
       </div>
       {error ? <p className="text-sm text-red-700">{error}</p> : null}
+      {whatsappHref ? (
+        <a
+          href={whatsappHref}
+          target="_blank"
+          rel="noreferrer"
+          className="flex w-full items-center justify-center gap-3 rounded-full border border-accent py-4 text-sm font-medium tracking-widest text-accent uppercase"
+        >
+          Escribir por WhatsApp
+        </a>
+      ) : null}
       <button
         type="submit"
         disabled={loading}

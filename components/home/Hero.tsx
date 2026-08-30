@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { JoinCtaButton } from "@/components/join/JoinCtaButton";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { Sparkles } from "@/components/ui/Sparkles";
 import { images } from "@/lib/images";
@@ -15,6 +16,7 @@ export function Hero() {
           alt=""
           fill
           preload
+          loading="eager"
           className="object-cover"
           sizes="100vw"
         />
@@ -62,9 +64,7 @@ export function Hero() {
           transition={{ duration: 0.8, delay: 0.7 }}
           className="mt-24 flex flex-col justify-center gap-4 sm:mt-28 sm:flex-row"
         >
-          <ButtonLink href="/contacto" variant="gold">
-            Comenzá tu proceso
-          </ButtonLink>
+          <JoinCtaButton>Quiero Unirme</JoinCtaButton>
           <ButtonLink href="/#programas" variant="outline">
             Explorar experiencias
           </ButtonLink>

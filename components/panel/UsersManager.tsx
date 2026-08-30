@@ -143,7 +143,7 @@ export function UsersManager({ users, padron, settings }: UsersManagerProps) {
                         <IconButton label="Editar" onClick={() => setDrawer(user)}>
                           <Pencil size={16} />
                         </IconButton>
-                        <form action={toggleMembershipAction}>
+                        <form action={async (formData) => { await toggleMembershipAction(formData); }}>
                           <input type="hidden" name="id" value={user.id} />
                           <input type="hidden" name="role" value={user.role} />
                           <IconButton

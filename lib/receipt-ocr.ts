@@ -61,7 +61,7 @@ export function extractPdfText(bytes: Uint8Array) {
       .trim();
     if (value.length > 1) chunks.push(value);
   }
-  const tj = raw.matchAll(/\[(.*?)\]\s*TJ/gs);
+  const tj = raw.matchAll(/\[([\s\S]*?)\]\s*TJ/g);
   for (const match of tj) {
     const inner = [...match[1].matchAll(/\((?:\\.|[^\\)])+\)/g)]
       .map((item) => item[0].slice(1, -1))

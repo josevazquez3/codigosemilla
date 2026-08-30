@@ -154,7 +154,7 @@ export function SalaEspecialBoard({
                       <Pencil size={12} />
                       Editar
                     </button>
-                    <form action={toggleSpecialRoomAction}>
+                    <form action={async (formData) => { await toggleSpecialRoomAction(formData); }}>
                       <input type="hidden" name="id" value={item.id} />
                       <button
                         type="submit"

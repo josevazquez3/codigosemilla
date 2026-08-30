@@ -186,7 +186,7 @@ export function ActivacionesBoard({
                           <Pencil size={12} />
                           Editar
                         </button>
-                        <form action={toggleActivationAction}>
+                        <form action={async (formData) => { await toggleActivationAction(formData); }}>
                           <input type="hidden" name="id" value={item.id} />
                           <button
                             type="submit"

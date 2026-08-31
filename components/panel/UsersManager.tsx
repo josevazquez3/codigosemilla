@@ -321,7 +321,6 @@ function UserDrawer({
   const [email, setEmail] = useState(user?.email ?? "");
   const [password, setPassword] = useState("");
   const [lockAutofill, setLockAutofill] = useState(!user);
-  const action = user ? updateUserAction : createUserAction;
 
   useEffect(() => {
     const previous = document.body.style.overflow;
@@ -357,12 +356,21 @@ function UserDrawer({
           autoComplete="off"
           action={async (formData) => {
             setError("");
-            const result = await action(formData);
+            if (user) {
+              const result = await updateUserAction(formData);
+              if (result?.error) {
+                setError(result.error);
+                return;
+              }
+              onClose();
+              return;
+            }
+            const result = await createUserAction(formData);
             if (result?.error) {
               setError(result.error);
               return;
             }
-            if (!user && "user" in result && result.user) {
+            if (result.user) {
               onCreated([result.user]);
               return;
             }

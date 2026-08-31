@@ -33,6 +33,10 @@ export function BitacoraBulkModal({ onClose }: { onClose: () => void }) {
     setError("");
     const result = await fetchBitacoraTitlesAction(urls);
     setAdding(false);
+    if ("error" in result && result.error) {
+      setError(result.error);
+      return;
+    }
     const seen = new Set(items.map((item) => item.url.toLowerCase()));
     const next = [...items];
     for (const item of result.items) {

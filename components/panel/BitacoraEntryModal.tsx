@@ -29,7 +29,7 @@ export function BitacoraEntryModal({ onClose }: { onClose: () => void }) {
       setLookingUp(true);
       const result = await fetchBitacoraTitleAction(trimmed);
       setLookingUp(false);
-      if (result.title) setTitle((current) => current || result.title);
+      if ("title" in result && result.title) setTitle((current) => current || result.title);
     }, 400);
     return () => window.clearTimeout(timer);
   }, [url]);

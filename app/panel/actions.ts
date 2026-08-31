@@ -86,6 +86,12 @@ async function actor() {
   return user;
 }
 
+async function adminActor() {
+  const user = await actor();
+  if (user.role !== "Admin") return { error: "No tenés permiso para esta acción." as const };
+  return user;
+}
+
 function text(form: FormData, key: string) {
   return String(form.get(key) ?? "").trim();
 }
@@ -97,10 +103,11 @@ export async function createUserAction(formData: FormData) {
   if (!email || !name) return { error: "Completá nombre y email." };
   if (await findUserByEmail(email)) return { error: "Ya existe una persona con ese email." };
 
+  const password = text(formData, "password");
   const user = await createUser({
     email,
     name,
-    password: text(formData, "password") || undefined,
+    password: password || undefined,
     role: parseRole(text(formData, "role")),
     status: text(formData, "status") === "suspended" ? "suspended" : "active",
     phone: text(formData, "phone"),
@@ -114,7 +121,15 @@ export async function createUserAction(formData: FormData) {
     detail: `Alta de ${user.name}`,
   });
   refresh();
-  return { ok: true };
+  return {
+    ok: true,
+    user: {
+      name: user.name,
+      email: user.email,
+      phone: user.phone,
+      password,
+    },
+  };
 }
 
 export async function updateUserAction(formData: FormData) {
@@ -222,6 +237,15 @@ export async function createUsersBulkAction(formData: FormData) {
       role: parseRole(item.role),
     })),
   );
+  const users = created.map((user) => {
+    const source = items.find((item) => item.email.trim().toLowerCase() === user.email);
+    return {
+      name: user.name,
+      email: user.email,
+      phone: user.phone || source?.phone || "",
+      password: source?.password || "",
+    };
+  });
   await logAudit({
     actorEmail: actorUser.email,
     action: "user.bulk-create",
@@ -229,7 +253,7 @@ export async function createUsersBulkAction(formData: FormData) {
     detail: `Creó ${created.length} usuario(s) desde el padrón`,
   });
   refresh();
-  return { ok: true, created: created.length };
+  return { ok: true, created: created.length, users };
 }
 
 export async function createEventAction(formData: FormData) {
@@ -907,7 +931,8 @@ export async function updateZoomMeetingAction(formData: FormData) {
 }
 
 export async function fetchBitacoraTitleAction(url: string) {
-  await actor();
+  const admin = await adminActor();
+  if ("error" in admin) return admin;
   const trimmed = url.trim();
   if (!trimmed) return { ok: true, title: "" };
   if (!isDriveUrl(trimmed)) return { ok: true, title: "" };
@@ -916,7 +941,8 @@ export async function fetchBitacoraTitleAction(url: string) {
 }
 
 export async function fetchBitacoraTitlesAction(urls: string[]) {
-  await actor();
+  const admin = await adminActor();
+  if ("error" in admin) return { ...admin, items: [] as { url: string; title: string }[] };
   const unique = parseBitacoraUrls(urls.join("\n")).slice(0, 50);
   const items = await Promise.all(
     unique.map(async (url) => ({
@@ -928,7 +954,8 @@ export async function fetchBitacoraTitlesAction(urls: string[]) {
 }
 
 export async function createBitacoraEntryAction(formData: FormData) {
-  const actorUser = await actor();
+  const actorUser = await adminActor();
+  if ("error" in actorUser) return actorUser;
   const url = text(formData, "url");
   let title = text(formData, "title");
   if (!url) return { error: "Completá la URL." };
@@ -947,7 +974,8 @@ export async function createBitacoraEntryAction(formData: FormData) {
 }
 
 export async function createBitacoraBulkAction(formData: FormData) {
-  const actorUser = await actor();
+  const actorUser = await adminActor();
+  if ("error" in actorUser) return actorUser;
   const raw = text(formData, "items") || text(formData, "urls");
   let inputs: { url: string; title: string }[] = [];
   try {
@@ -982,7 +1010,8 @@ export async function createBitacoraBulkAction(formData: FormData) {
 }
 
 export async function syncBitacoraDriveAction() {
-  const actorUser = await actor();
+  const actorUser = await adminActor();
+  if ("error" in actorUser) return { ...actorUser, updated: 0 };
   const entries = await listBitacoraEntries();
   let updated = 0;
   for (const entry of entries) {
@@ -1003,7 +1032,8 @@ export async function syncBitacoraDriveAction() {
 }
 
 export async function deleteBitacoraEntryAction(formData: FormData) {
-  const actorUser = await actor();
+  const actorUser = await adminActor();
+  if ("error" in actorUser) return actorUser;
   const id = Number(formData.get("id"));
   if (!id) return { error: "Registro inválido." };
   await deleteBitacoraEntry(id);

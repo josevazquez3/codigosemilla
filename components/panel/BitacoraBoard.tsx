@@ -27,7 +27,13 @@ function localDay(value: string) {
   return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
 }
 
-export function BitacoraBoard({ entries }: { entries: PanelBitacoraEntry[] }) {
+export function BitacoraBoard({
+  entries,
+  canManage = false,
+}: {
+  entries: PanelBitacoraEntry[];
+  canManage?: boolean;
+}) {
   const router = useRouter();
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
@@ -107,37 +113,41 @@ export function BitacoraBoard({ entries }: { entries: PanelBitacoraEntry[] }) {
           </label>
           <button
             type="button"
-            onClick={() => setDrawer("create")}
-            className="inline-flex items-center gap-2 rounded-2xl bg-[#4f7a58] px-4 py-3 text-[11px] tracking-[0.14em] text-white uppercase hover:bg-[#2d4739]"
-          >
-            <Link2 size={14} />
-            Nuevo registro
-          </button>
-          <button
-            type="button"
-            onClick={() => setDrawer("bulk")}
-            className="inline-flex items-center gap-2 rounded-2xl border border-[#4f7a58] px-4 py-3 text-[11px] tracking-[0.14em] text-primary uppercase hover:bg-[#e8f3e3]"
-          >
-            <Layers size={14} />
-            Carga masiva
-          </button>
-          <button
-            type="button"
-            onClick={syncDrive}
-            disabled={syncing}
-            className="inline-flex items-center gap-2 rounded-2xl border border-[#4f7a58] px-4 py-3 text-[11px] tracking-[0.14em] text-primary uppercase hover:bg-[#e8f3e3] disabled:opacity-70"
-          >
-            <CloudDownload size={14} />
-            {syncing ? "Sincronizando..." : "Sincronizar Drive"}
-          </button>
-          <button
-            type="button"
             onClick={() => router.refresh()}
             className="inline-flex items-center gap-2 rounded-2xl border border-[#4f7a58] px-4 py-3 text-[11px] tracking-[0.14em] text-primary uppercase hover:bg-[#e8f3e3]"
           >
             <RefreshCw size={14} />
             Actualizar
           </button>
+          {canManage ? (
+            <>
+              <button
+                type="button"
+                onClick={() => setDrawer("create")}
+                className="inline-flex items-center gap-2 rounded-2xl bg-[#4f7a58] px-4 py-3 text-[11px] tracking-[0.14em] text-white uppercase hover:bg-[#2d4739]"
+              >
+                <Link2 size={14} />
+                Nuevo registro
+              </button>
+              <button
+                type="button"
+                onClick={() => setDrawer("bulk")}
+                className="inline-flex items-center gap-2 rounded-2xl border border-[#4f7a58] px-4 py-3 text-[11px] tracking-[0.14em] text-primary uppercase hover:bg-[#e8f3e3]"
+              >
+                <Layers size={14} />
+                Carga masiva
+              </button>
+              <button
+                type="button"
+                onClick={syncDrive}
+                disabled={syncing}
+                className="inline-flex items-center gap-2 rounded-2xl border border-[#4f7a58] px-4 py-3 text-[11px] tracking-[0.14em] text-primary uppercase hover:bg-[#e8f3e3] disabled:opacity-70"
+              >
+                <CloudDownload size={14} />
+                {syncing ? "Sincronizando..." : "Sincronizar Drive"}
+              </button>
+            </>
+          ) : null}
         </div>
 
         {message ? <p className="mt-4 text-sm text-[#4f7a58]">{message}</p> : null}
@@ -147,10 +157,12 @@ export function BitacoraBoard({ entries }: { entries: PanelBitacoraEntry[] }) {
             {entries.length === 0 ? (
               <>
                 <p>Todavía no hay registros en la bitácora.</p>
-                <p className="mt-1">
-                  Usá <strong className="font-medium text-primary">Nuevo registro</strong> arriba
-                  para agregar el primero.
-                </p>
+                {canManage ? (
+                  <p className="mt-1">
+                    Usá <strong className="font-medium text-primary">Nuevo registro</strong> arriba
+                    para agregar el primero.
+                  </p>
+                ) : null}
               </>
             ) : (
               <p>No hay registros en el rango de fechas elegido.</p>
@@ -186,21 +198,23 @@ export function BitacoraBoard({ entries }: { entries: PanelBitacoraEntry[] }) {
                         >
                           <ExternalLink size={16} />
                         </a>
-                        <form
-                          action={async (formData) => {
-                            if (!window.confirm("¿Eliminar este registro de la bitácora?")) return;
-                            await deleteBitacoraEntryAction(formData);
-                          }}
-                        >
-                          <input type="hidden" name="id" value={entry.id} />
-                          <button
-                            type="submit"
-                            className="rounded-full p-2 text-[#7a3a34] hover:bg-[#f8e6e4]"
-                            aria-label="Eliminar"
+                        {canManage ? (
+                          <form
+                            action={async (formData) => {
+                              if (!window.confirm("¿Eliminar este registro de la bitácora?")) return;
+                              await deleteBitacoraEntryAction(formData);
+                            }}
                           >
-                            <Trash2 size={16} />
-                          </button>
-                        </form>
+                            <input type="hidden" name="id" value={entry.id} />
+                            <button
+                              type="submit"
+                              className="rounded-full p-2 text-[#7a3a34] hover:bg-[#f8e6e4]"
+                              aria-label="Eliminar"
+                            >
+                              <Trash2 size={16} />
+                            </button>
+                          </form>
+                        ) : null}
                       </div>
                     </td>
                   </tr>
@@ -211,8 +225,8 @@ export function BitacoraBoard({ entries }: { entries: PanelBitacoraEntry[] }) {
         )}
       </section>
 
-      {drawer === "create" ? <BitacoraEntryModal onClose={() => setDrawer(null)} /> : null}
-      {drawer === "bulk" ? <BitacoraBulkModal onClose={() => setDrawer(null)} /> : null}
+      {canManage && drawer === "create" ? <BitacoraEntryModal onClose={() => setDrawer(null)} /> : null}
+      {canManage && drawer === "bulk" ? <BitacoraBulkModal onClose={() => setDrawer(null)} /> : null}
     </div>
   );
 }

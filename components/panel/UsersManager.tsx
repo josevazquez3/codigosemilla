@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import {
+  Check,
   Layers,
   MessageCircle,
   Pencil,
@@ -20,9 +21,17 @@ import {
   updateUserAction,
 } from "@/app/panel/actions";
 import { fieldClass } from "@/components/panel/ui";
+import { WhatsAppIcon } from "@/components/ui/WhatsAppIcon";
 import { USER_ROLES, type PanelUser, type UserRole } from "@/lib/panel-data";
 import type { PadronRow } from "@/lib/padron";
 import { applyTemplate, whatsappUrl, type SiteSettings } from "@/lib/site-settings";
+
+type CreatedCredential = {
+  name: string;
+  email: string;
+  phone: string;
+  password: string;
+};
 
 type UsersManagerProps = {
   users: PanelUser[];
@@ -34,6 +43,20 @@ export function UsersManager({ users, padron, settings }: UsersManagerProps) {
   const [query, setQuery] = useState("");
   const [drawer, setDrawer] = useState<"create" | PanelUser | null>(null);
   const [bulkOpen, setBulkOpen] = useState(false);
+  const [created, setCreated] = useState<CreatedCredential[] | null>(null);
+  const [whatsappIndex, setWhatsappIndex] = useState<number | null>(null);
+
+  function showCreated(usersCreated: CreatedCredential[]) {
+    setDrawer(null);
+    setBulkOpen(false);
+    setCreated(usersCreated);
+    setWhatsappIndex(null);
+  }
+
+  function closeCreated() {
+    setCreated(null);
+    setWhatsappIndex(null);
+  }
 
   const filtered = useMemo(() => {
     const value = query.trim().toLowerCase();
@@ -199,6 +222,7 @@ export function UsersManager({ users, padron, settings }: UsersManagerProps) {
         <UserDrawer
           user={drawer === "create" ? null : drawer}
           onClose={() => setDrawer(null)}
+          onCreated={showCreated}
         />
       ) : null}
       {bulkOpen ? (
@@ -206,6 +230,29 @@ export function UsersManager({ users, padron, settings }: UsersManagerProps) {
           padron={padron}
           settings={settings}
           onClose={() => setBulkOpen(false)}
+          onCreated={showCreated}
+        />
+      ) : null}
+      {created && whatsappIndex === null ? (
+        <CreatedSuccessModal
+          users={created}
+          onClose={closeCreated}
+          onSendAll={() => setWhatsappIndex(0)}
+        />
+      ) : null}
+      {created && whatsappIndex !== null ? (
+        <WhatsAppQueueModal
+          users={created}
+          index={whatsappIndex}
+          settings={settings}
+          onClose={closeCreated}
+          onSent={() => {
+            if (whatsappIndex + 1 >= created.length) {
+              closeCreated();
+              return;
+            }
+            setWhatsappIndex(whatsappIndex + 1);
+          }}
         />
       ) : null}
     </div>
@@ -262,9 +309,11 @@ function IconButton({
 function UserDrawer({
   user,
   onClose,
+  onCreated,
 }: {
   user: PanelUser | null;
   onClose: () => void;
+  onCreated: (users: CreatedCredential[]) => void;
 }) {
   const [showPassword, setShowPassword] = useState(false);
   const [active, setActive] = useState(user ? user.status === "active" : true);
@@ -311,6 +360,10 @@ function UserDrawer({
             const result = await action(formData);
             if (result?.error) {
               setError(result.error);
+              return;
+            }
+            if (!user && "user" in result && result.user) {
+              onCreated([result.user]);
               return;
             }
             onClose();
@@ -433,10 +486,12 @@ function BulkCreateModal({
   padron,
   settings,
   onClose,
+  onCreated,
 }: {
   padron: PadronRow[];
   settings: SiteSettings;
   onClose: () => void;
+  onCreated: (users: CreatedCredential[]) => void;
 }) {
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState<Record<string, boolean>>(() =>
@@ -501,7 +556,11 @@ function BulkCreateModal({
       setError(result.error);
       return;
     }
-    onClose();
+    if (!result.users?.length) {
+      setError("No se creó ningún usuario nuevo. Revisá si ya existían.");
+      return;
+    }
+    onCreated(result.users);
   }
 
   return (
@@ -676,6 +735,192 @@ function BulkCreateModal({
             {pending ? "Creando..." : `Crear ${selectedCount} usuarios`}
           </button>
         </div>
+      </div>
+    </div>
+  );
+}
+
+function CreatedSuccessModal({
+  users,
+  onClose,
+  onSendAll,
+}: {
+  users: CreatedCredential[];
+  onClose: () => void;
+  onSendAll: () => void;
+}) {
+  const first = users[0];
+  const many = users.length > 1;
+
+  useEffect(() => {
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previous;
+    };
+  }, []);
+
+  return (
+    <div className="fixed inset-0 z-[80] flex items-center justify-center px-4 py-6">
+      <button type="button" aria-label="Cerrar" className="absolute inset-0 bg-primary/35" onClick={onClose} />
+      <div className="relative w-full max-w-lg rounded-3xl bg-[#f9f7f2] p-6 shadow-2xl">
+        <div className="flex items-start justify-between gap-4">
+          <h2 className="font-heading text-3xl text-primary uppercase">
+            {many ? "Usuarios creados" : "Usuario creado"}
+          </h2>
+          <button type="button" onClick={onClose} className="text-[#6f8a74] hover:text-primary" aria-label="Cerrar">
+            <X size={18} />
+          </button>
+        </div>
+        <div className="mt-6 rounded-2xl border border-[#d7e6d3] bg-[#e8f3e3] px-5 py-8 text-center">
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[#4f7a58] text-white">
+            <Check size={22} />
+          </div>
+          {many ? (
+            <>
+              <p className="mt-4 text-lg font-medium text-primary">
+                {users.length} usuarios creados
+              </p>
+              <ul className="mx-auto mt-3 max-h-28 max-w-sm space-y-1 overflow-y-auto text-sm text-[#6f8a74]">
+                {users.map((user) => (
+                  <li key={user.email}>{user.name}</li>
+                ))}
+              </ul>
+            </>
+          ) : (
+            <>
+              <p className="mt-4 text-lg font-medium text-primary">{first?.name}</p>
+              <p className="mt-1 text-sm text-[#6f8a74]">{first?.email}</p>
+            </>
+          )}
+        </div>
+        <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
+          <button
+            type="button"
+            onClick={onClose}
+            className="rounded-full border border-[#c4a35a] bg-white px-5 py-3 text-xs tracking-[0.16em] text-primary uppercase"
+          >
+            Cerrar
+          </button>
+          <button
+            type="button"
+            onClick={onSendAll}
+            className="inline-flex items-center justify-center gap-2 rounded-full bg-[#25D366] px-5 py-3 text-xs tracking-[0.12em] text-white uppercase hover:bg-[#1fad4f]"
+          >
+            <WhatsAppIcon size={16} />
+            Enviar todos por WhatsApp ({users.length})
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function WhatsAppQueueModal({
+  users,
+  index,
+  settings,
+  onClose,
+  onSent,
+}: {
+  users: CreatedCredential[];
+  index: number;
+  settings: SiteSettings;
+  onClose: () => void;
+  onSent: () => void;
+}) {
+  const current = users[index];
+  const [phone, setPhone] = useState(current.phone || settings.whatsappNumber);
+  const [email, setEmail] = useState(current.email);
+  const [password, setPassword] = useState(current.password);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    setPhone(current.phone || settings.whatsappNumber);
+    setEmail(current.email);
+    setPassword(current.password);
+    setError("");
+  }, [current, settings.whatsappNumber]);
+
+  useEffect(() => {
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previous;
+    };
+  }, []);
+
+  const message = applyTemplate(settings.messageBulkUsers, {
+    nombre: current.name,
+    usuario: email,
+    clave: password,
+    email,
+  });
+
+  function send() {
+    const href = whatsappUrl(phone, message);
+    if (!href) {
+      setError("Indicá el celular para enviar las credenciales.");
+      return;
+    }
+    window.open(href, "_blank", "noopener,noreferrer");
+    onSent();
+  }
+
+  return (
+    <div className="fixed inset-0 z-[80] flex items-center justify-center px-4 py-6">
+      <button type="button" aria-label="Cerrar" className="absolute inset-0 bg-primary/35" onClick={onClose} />
+      <div className="relative max-h-[92vh] w-full max-w-lg overflow-y-auto rounded-3xl bg-[#f9f7f2] p-6 shadow-2xl">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <div className="flex items-center gap-2 text-[#25D366]">
+              <WhatsAppIcon size={22} />
+              <h2 className="font-heading text-3xl text-primary uppercase">WhatsApp</h2>
+            </div>
+            <p className="mt-2 font-medium text-primary">{current.name}</p>
+            <p className="mt-1 text-sm font-medium text-[#25D366]">
+              {index + 1} de {users.length}
+            </p>
+          </div>
+          <button type="button" onClick={onClose} className="text-[#6f8a74] hover:text-primary" aria-label="Cerrar">
+            <X size={18} />
+          </button>
+        </div>
+
+        <div className="mt-6 space-y-4">
+          <label className="block space-y-2">
+            <span className="block text-[11px] tracking-[0.2em] text-[#6f8a74] uppercase">Celular</span>
+            <input
+              value={phone}
+              onChange={(event) => setPhone(event.target.value)}
+              className={fieldClass}
+              placeholder="+5492215551234"
+            />
+            <p className="text-xs text-[#6f8a74]">Indicá el celular para enviar las credenciales.</p>
+          </label>
+          <label className="block space-y-2">
+            <span className="block text-[11px] tracking-[0.2em] text-[#6f8a74] uppercase">Mensaje</span>
+            <textarea readOnly value={message} rows={7} className={`${fieldClass} resize-none bg-[#f7faf5]`} />
+          </label>
+          <label className="block space-y-2">
+            <span className="block text-[11px] tracking-[0.2em] text-[#6f8a74] uppercase">Usuario</span>
+            <input value={email} onChange={(event) => setEmail(event.target.value)} className={fieldClass} />
+          </label>
+          <label className="block space-y-2">
+            <span className="block text-[11px] tracking-[0.2em] text-[#6f8a74] uppercase">Clave</span>
+            <input value={password} onChange={(event) => setPassword(event.target.value)} className={fieldClass} />
+          </label>
+          {error ? <p className="text-sm text-[#7a3a34]">{error}</p> : null}
+        </div>
+
+        <button
+          type="button"
+          onClick={send}
+          className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#25D366] px-5 py-3.5 text-sm tracking-[0.16em] text-white uppercase hover:bg-[#1fad4f]"
+        >
+          <WhatsAppIcon size={18} />
+          Enviar
+        </button>
       </div>
     </div>
   );

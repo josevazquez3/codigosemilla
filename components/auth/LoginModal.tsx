@@ -104,18 +104,35 @@ export function LoginModal({ open, onClose }: LoginModalProps) {
             </button>
 
             <div className="mb-6 flex flex-col items-center text-center">
-              <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full border border-accent bg-[#f7f3ea]">
+              <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full border border-[#f07820] bg-[#f7f3ea]">
                 <svg
-                  viewBox="0 0 24 24"
-                  className="h-6 w-6 text-accent"
-                  fill="currentColor"
+                  viewBox="0 0 80 80"
+                  className="h-9 w-9 text-[#f07820]"
+                  fill="none"
                   aria-hidden="true"
                 >
-                  <path d="M12 2.5 13.2 9.2 20 8.2 14.8 12 20 15.8 13.2 14.8 12 21.5 10.8 14.8 4 15.8 9.2 12 4 8.2 10.8 9.2Z" />
+                  <path
+                    d="M40 8 L42.4 36 L66 40 L42.4 44 L40 72 L37.6 44 L14 40 L37.6 36 Z"
+                    fill="currentColor"
+                  />
+                  <path
+                    d="M26 16 C12 24, 12 56, 26 64"
+                    stroke="currentColor"
+                    strokeWidth="2.2"
+                    strokeLinecap="round"
+                  />
+                  <path
+                    d="M54 16 C68 24, 68 56, 54 64"
+                    stroke="currentColor"
+                    strokeWidth="2.2"
+                    strokeLinecap="round"
+                  />
+                  <circle cx="60" cy="14" r="2.6" fill="currentColor" />
+                  <circle cx="20" cy="66" r="2.6" fill="currentColor" />
                 </svg>
               </div>
               <p className="text-[11px] tracking-[0.28em] text-primary uppercase">
-                Conciencia Estelar
+                Código Semilla
               </p>
               <h2
                 id="login-title"

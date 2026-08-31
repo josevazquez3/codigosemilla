@@ -17,7 +17,9 @@ export default async function ActivacionesPage() {
   const canManage = session?.role === "Admin" || user?.role === "Admin";
   const allowedIds = canManage
     ? null
-    : await listActivationPermissionIds(user?.role === "Usuario Membresía" ? (user.id ?? 0) : 0);
+    : user?.role === "Usuario Membresía"
+      ? await listActivationPermissionIds(user.id ?? 0)
+      : null;
 
   return (
     <section className="mx-auto max-w-6xl">

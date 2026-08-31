@@ -12,8 +12,9 @@ export type UserRole = "Admin" | "Usuario" | "Usuario Membresía";
 export const USER_ROLES: UserRole[] = ["Admin", "Usuario", "Usuario Membresía"];
 
 export function parseRole(value: string): UserRole {
-  if (value === "Admin") return "Admin";
-  if (value === "Usuario Membresía" || value === "Usuario Membresia") return "Usuario Membresía";
+  const normalized = value.trim();
+  if (/^admin(istrador)?$/i.test(normalized)) return "Admin";
+  if (/^usuario membres[ií]a$/i.test(normalized)) return "Usuario Membresía";
   return "Usuario";
 }
 export type UserStatus = "active" | "invited" | "suspended";

@@ -53,8 +53,8 @@ export function ActivacionesBoard({
   }, [activations, query]);
 
   function isUnlocked(item: PanelActivation) {
-    if (canManage) return item.enabled;
-    return Boolean(allowedIds?.includes(item.id));
+    if (canManage || allowedIds === null) return item.enabled;
+    return Boolean(allowedIds.includes(item.id));
   }
 
   return (

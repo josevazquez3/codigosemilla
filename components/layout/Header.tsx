@@ -8,7 +8,7 @@ import { navItems } from "@/lib/content";
 import { Logo } from "@/components/ui/Logo";
 import { useLoginModal } from "@/components/auth/LoginProvider";
 
-export function Header() {
+export function Header({ loggedIn = false }: { loggedIn?: boolean }) {
   const pathname = usePathname();
   const { openLogin } = useLoginModal();
   const [open, setOpen] = useState(false);
@@ -56,13 +56,22 @@ export function Header() {
               </Link>
             );
           })}
-          <button
-            type="button"
-            onClick={openLogin}
-            className="ml-3 rounded-full bg-accent px-5 py-2 text-sm font-medium tracking-widest text-accent-foreground uppercase transition-all hover:scale-105 hover:shadow-lg hover:shadow-accent/25 xl:px-6 xl:text-base"
-          >
-            Ingresar
-          </button>
+          {loggedIn ? (
+            <Link
+              href="/panel"
+              className="ml-3 rounded-full bg-accent px-5 py-2 text-sm font-medium tracking-widest text-accent-foreground uppercase transition-all hover:scale-105 hover:shadow-lg hover:shadow-accent/25 xl:px-6 xl:text-base"
+            >
+              Ingresar
+            </Link>
+          ) : (
+            <button
+              type="button"
+              onClick={openLogin}
+              className="ml-3 rounded-full bg-accent px-5 py-2 text-sm font-medium tracking-widest text-accent-foreground uppercase transition-all hover:scale-105 hover:shadow-lg hover:shadow-accent/25 xl:px-6 xl:text-base"
+            >
+              Ingresar
+            </button>
+          )}
         </nav>
         <button
           type="button"
@@ -90,16 +99,26 @@ export function Header() {
               </Link>
             ))}
             <div className="pt-4">
-              <button
-                type="button"
-                onClick={() => {
-                  setOpen(false);
-                  openLogin();
-                }}
-                className="inline-flex rounded-full bg-accent px-6 py-3 text-sm font-medium tracking-widest text-accent-foreground uppercase"
-              >
-                Ingresar
-              </button>
+              {loggedIn ? (
+                <Link
+                  href="/panel"
+                  onClick={() => setOpen(false)}
+                  className="inline-flex rounded-full bg-accent px-6 py-3 text-sm font-medium tracking-widest text-accent-foreground uppercase"
+                >
+                  Ingresar
+                </Link>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setOpen(false);
+                    openLogin();
+                  }}
+                  className="inline-flex rounded-full bg-accent px-6 py-3 text-sm font-medium tracking-widest text-accent-foreground uppercase"
+                >
+                  Ingresar
+                </button>
+              )}
             </div>
           </nav>
         </div>

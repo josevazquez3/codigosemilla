@@ -11,8 +11,9 @@ export type SessionUser = {
 };
 
 export function parseSessionRole(value: unknown): SessionRole {
-  if (value === "Admin") return "Admin";
-  if (value === "Usuario Membresía" || value === "Usuario Membresia") return "Usuario Membresía";
+  const normalized = String(value ?? "").trim();
+  if (/^admin(istrador)?$/i.test(normalized)) return "Admin";
+  if (/^usuario membres[ií]a$/i.test(normalized)) return "Usuario Membresía";
   return "Usuario";
 }
 

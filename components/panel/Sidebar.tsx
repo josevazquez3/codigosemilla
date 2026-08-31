@@ -14,6 +14,7 @@ import {
   Home,
   IdCard,
   Landmark,
+  ArrowLeft,
   LogOut,
   BookOpen,
   Monitor,
@@ -196,23 +197,57 @@ export function Sidebar({ user, mobileOpen, onClose }: SidebarProps) {
                     <span className="leading-snug">{item.label}</span>
                   </Link>
                 )}
+                {item.label === "Tesorería" ? (
+                  <SessionLinks
+                    loggingOut={loggingOut}
+                    onClose={onClose}
+                    onLogout={logout}
+                  />
+                ) : null}
               </div>
             );
           })}
+          {items.some((item) => item.label === "Tesorería") ? null : (
+            <SessionLinks
+              loggingOut={loggingOut}
+              onClose={onClose}
+              onLogout={logout}
+            />
+          )}
         </nav>
-
-        <div className="border-t border-white/10 p-4">
-          <button
-            type="button"
-            onClick={logout}
-            disabled={loggingOut}
-            className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-white/75 transition-colors hover:bg-white/10 hover:text-white disabled:opacity-70"
-          >
-            <LogOut size={16} />
-            {loggingOut ? "Saliendo..." : "Cerrar sesión"}
-          </button>
-        </div>
       </aside>
     </>
+  );
+}
+
+function SessionLinks({
+  loggingOut,
+  onClose,
+  onLogout,
+}: {
+  loggingOut: boolean;
+  onClose: () => void;
+  onLogout: () => void;
+}) {
+  return (
+    <div className="mt-8 space-y-1">
+      <Link
+        href="/"
+        onClick={onClose}
+        className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-white/75 transition-colors hover:bg-white/10 hover:text-white"
+      >
+        <ArrowLeft size={16} />
+        Volver a la landing
+      </Link>
+      <button
+        type="button"
+        onClick={onLogout}
+        disabled={loggingOut}
+        className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-white/75 transition-colors hover:bg-white/10 hover:text-white disabled:opacity-70"
+      >
+        <LogOut size={16} />
+        {loggingOut ? "Saliendo..." : "Cerrar sesión"}
+      </button>
+    </div>
   );
 }

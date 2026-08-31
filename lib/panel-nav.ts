@@ -197,24 +197,41 @@ export const panelCards = panelNav
 
 export type PanelRole = "Admin" | "Usuario" | "Usuario Membresía";
 
-const usuarioPaths = ["/panel", "/panel/zoom", "/panel/inscripcion-encuentros", "/panel/tesoreria/adjuntar-pago"];
+const usuarioPaths = [
+  "/panel",
+  "/panel/zoom",
+  "/panel/bitacora",
+  "/panel/activaciones",
+  "/panel/inscripcion-encuentros",
+  "/panel/tesoreria/adjuntar-pago",
+];
 
-const membresiaPaths = [...usuarioPaths, "/panel/activaciones", "/panel/sala-especial"];
+const membresiaPaths = [
+  ...usuarioPaths,
+  "/panel/bitacora",
+  "/panel/activaciones",
+  "/panel/sala-especial",
+];
 
 function pathMatches(path: string, prefix: string) {
   if (prefix === "/panel") return path === "/panel";
   return path === prefix || path.startsWith(`${prefix}/`);
 }
 
+export function isAdminRole(role?: string | null) {
+  return role === "Admin";
+}
+
 export function canAccessPath(role: PanelRole, path: string) {
-  if (role === "Admin") return true;
+  if (isAdminRole(role)) return true;
   if (path.startsWith("/panel/inscripcion-encuentros/inscriptos")) return false;
+  if (pathMatches(path, "/panel/sala-especial")) return role === "Usuario Membresía";
   const allowed = role === "Usuario Membresía" ? membresiaPaths : usuarioPaths;
   return allowed.some((prefix) => pathMatches(path, prefix));
 }
 
 export function navForRole(role: PanelRole): PanelNavItem[] {
-  if (role === "Admin") return panelNav;
+  if (isAdminRole(role)) return panelNav;
   return panelNav
     .map((item) => {
       if (item.children) {

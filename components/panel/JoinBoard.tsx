@@ -49,6 +49,7 @@ export function JoinBoard({
   const filtered = useMemo(() => {
     const value = query.trim().toLowerCase();
     return applications.filter((item) => {
+      if (item.status === "accepted") return false;
       if (onlyUsers && !existingEmails.has(item.email)) return false;
       if (kind === "especial" && !item.isSpecialRoom) return false;
       if (kind === "encuentros" && !item.isEncuentros) return false;

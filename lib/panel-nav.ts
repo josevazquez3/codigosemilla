@@ -18,7 +18,8 @@ export type PanelIcon =
   | "log"
   | "sparkles"
   | "crown"
-  | "lock";
+  | "lock"
+  | "inbox";
 
 export type PanelLink = {
   href: string;
@@ -114,6 +115,25 @@ export const panelNav: PanelNavItem[] = [
     label: "Quiero unirme",
     icon: "join",
     description: "Solicitudes de ingreso y seguimiento de nuevos integrantes.",
+  },
+  {
+    label: "Consultas Contactos",
+    icon: "inbox",
+    description: "Mensajes del formulario de Contacto y seguimiento de respuestas.",
+    children: [
+      {
+        href: "/panel/consultas-contactos",
+        label: "Consultas Contactos",
+        description: "Consultas pendientes del formulario de Contacto.",
+        icon: "inbox",
+      },
+      {
+        href: "/panel/consultas-contactos/historial",
+        label: "Historial Consultas",
+        description: "Consultas respondidas del formulario de Contacto.",
+        icon: "history",
+      },
+    ],
   },
   {
     href: "/panel/encuentros-seminarios",

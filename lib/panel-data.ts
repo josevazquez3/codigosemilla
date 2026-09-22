@@ -21,6 +21,7 @@ export type UserStatus = "active" | "invited" | "suspended";
 export type EventStatus = "draft" | "open" | "closed" | "cancelled";
 export type RegistrationStatus = "pending" | "confirmed" | "cancelled" | "waitlist";
 export type ApplicationStatus = "pending" | "reviewed" | "accepted" | "rejected";
+export type ContactInquiryStatus = "pending" | "responded";
 export type DueStatus = "pending" | "paid" | "overdue" | "waived";
 
 export type PanelUser = {
@@ -172,6 +173,18 @@ export type PanelApplication = {
   createdAt: string;
 };
 
+export type PanelContactInquiry = {
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  message: string;
+  interest: string;
+  status: ContactInquiryStatus;
+  createdAt: string;
+};
+
 export type ApplicationInput = {
   name?: string;
   firstName?: string;
@@ -277,6 +290,7 @@ type Memory = {
     Omit<PanelRegistration, "eventTitle" | "eventStartsAt" | "userName" | "userEmail" | "userPhone">
   >;
   applications: PanelApplication[];
+  contactInquiries: PanelContactInquiry[];
   payments: Array<Omit<PanelPayment, "userName">>;
   dues: Array<Omit<PanelDue, "userName">>;
   audit: PanelAudit[];
@@ -559,6 +573,7 @@ function memory(): Memory {
       events: [],
       registrations: [],
       applications: [],
+      contactInquiries: [],
       payments: [],
       dues: [],
       audit: [],
@@ -581,6 +596,7 @@ function memory(): Memory {
     g.__gvPanel = store;
   }
   g.__gvPanel.activationPermissions ??= [];
+  g.__gvPanel.contactInquiries ??= [];
   g.__gvPanel.specialRooms ??= [];
   g.__gvPanel.activations ??= [];
   g.__gvPanel.bitacora ??= [];
@@ -795,6 +811,19 @@ async function ensurePanelSchema() {
   `;
   await sql`CREATE UNIQUE INDEX IF NOT EXISTS panel_bitacora_url ON panel_bitacora (url)`;
   await sql`
+    CREATE TABLE IF NOT EXISTS panel_contact_inquiries (
+      id SERIAL PRIMARY KEY,
+      first_name TEXT NOT NULL DEFAULT '',
+      last_name TEXT NOT NULL DEFAULT '',
+      email TEXT NOT NULL DEFAULT '',
+      phone TEXT NOT NULL DEFAULT '',
+      message TEXT NOT NULL DEFAULT '',
+      interest TEXT DEFAULT '',
+      status TEXT NOT NULL DEFAULT 'pending',
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    )
+  `;
+  await sql`
     CREATE TABLE IF NOT EXISTS panel_activations (
       id SERIAL PRIMARY KEY,
       title TEXT NOT NULL,
@@ -878,6 +907,7 @@ async function ensurePanelSchema() {
       events: [],
       registrations: [],
       applications: [],
+      contactInquiries: [],
       payments: [],
       dues: [],
       audit: [],
@@ -2118,6 +2148,94 @@ export async function updateApplicationStatus(id: number, status: ApplicationSta
   await ensurePanelSchema();
   await sql`UPDATE panel_applications SET status = ${status} WHERE id = ${id}`;
   return getApplicationById(id);
+}
+
+function mapContactInquiry(row: Record<string, unknown>): PanelContactInquiry {
+  const status = String(row.status ?? "pending") === "responded" ? "responded" : "pending";
+  return {
+    id: Number(row.id),
+    firstName: String(row.firstName ?? row.first_name ?? ""),
+    lastName: String(row.lastName ?? row.last_name ?? ""),
+    email: String(row.email ?? ""),
+    phone: String(row.phone ?? ""),
+    message: String(row.message ?? ""),
+    interest: String(row.interest ?? ""),
+    status,
+    createdAt: iso(new Date(String(row.createdAt ?? row.created_at))),
+  };
+}
+
+export async function listContactInquiries(): Promise<PanelContactInquiry[]> {
+  const sql = getSql();
+  if (!sql) {
+    return [...memory().contactInquiries].sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+  }
+  await ensurePanelSchema();
+  const rows = await sql`SELECT * FROM panel_contact_inquiries ORDER BY created_at DESC`;
+  return rows.map((row) => mapContactInquiry(row as Record<string, unknown>));
+}
+
+export async function createContactInquiry(input: {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  message: string;
+  interest?: string;
+}) {
+  const inquiry: PanelContactInquiry = {
+    id: 0,
+    firstName: input.firstName.trim(),
+    lastName: input.lastName.trim(),
+    email: input.email.trim().toLowerCase(),
+    phone: input.phone.trim(),
+    message: input.message.trim(),
+    interest: String(input.interest ?? "").trim(),
+    status: "pending",
+    createdAt: iso(),
+  };
+  const sql = getSql();
+  if (!sql) {
+    const store = memory();
+    inquiry.id = nextId(store, "contactInquiries");
+    store.contactInquiries.unshift(inquiry);
+    return inquiry;
+  }
+  await ensurePanelSchema();
+  const rows = await sql`
+    INSERT INTO panel_contact_inquiries (
+      first_name, last_name, email, phone, message, interest, status, created_at
+    )
+    VALUES (
+      ${inquiry.firstName}, ${inquiry.lastName}, ${inquiry.email}, ${inquiry.phone},
+      ${inquiry.message}, ${inquiry.interest}, ${inquiry.status}, ${inquiry.createdAt}
+    )
+    RETURNING *
+  `;
+  return mapContactInquiry(rows[0] as Record<string, unknown>);
+}
+
+export async function updateContactInquiryStatus(id: number, status: ContactInquiryStatus) {
+  const sql = getSql();
+  if (!sql) {
+    const inquiry = memory().contactInquiries.find((item) => item.id === id);
+    if (inquiry) inquiry.status = status;
+    return inquiry ?? null;
+  }
+  await ensurePanelSchema();
+  await sql`UPDATE panel_contact_inquiries SET status = ${status} WHERE id = ${id}`;
+  const rows = await listContactInquiries();
+  return rows.find((item) => item.id === id) ?? null;
+}
+
+export async function deleteContactInquiry(id: number) {
+  const sql = getSql();
+  if (!sql) {
+    memory().contactInquiries = memory().contactInquiries.filter((item) => item.id !== id);
+    return;
+  }
+  await ensurePanelSchema();
+  await sql`DELETE FROM panel_contact_inquiries WHERE id = ${id}`;
 }
 
 export async function listPayments(): Promise<PanelPayment[]> {

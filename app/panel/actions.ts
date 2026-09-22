@@ -58,6 +58,8 @@ import {
   registerToEvent,
   saveSettings,
   updateApplicationStatus,
+  updateContactInquiryStatus,
+  deleteContactInquiry,
   updateDueStatus,
   updateEventStatus,
   updateUser,
@@ -523,6 +525,41 @@ export async function reviewApplicationAction(formData: FormData) {
     detail: `Marcó la solicitud como ${status}`,
   });
   refresh();
+}
+
+export async function markContactInquiryRespondedAction(formData: FormData) {
+  const actorUser = await adminActor();
+  if ("error" in actorUser) return actorUser;
+  const id = Number(formData.get("id"));
+  if (!id) return { error: "Consulta inválida." };
+  const inquiry = await updateContactInquiryStatus(id, "responded");
+  if (!inquiry) return { error: "No se encontró la consulta." };
+  await logAudit({
+    actorEmail: actorUser.email,
+    action: "contact.respond",
+    entityType: "contactInquiry",
+    entityId: id,
+    detail: `Marcó como respondida la consulta de ${inquiry.firstName} ${inquiry.lastName}`,
+  });
+  refresh();
+  return { ok: true };
+}
+
+export async function deleteContactInquiryAction(formData: FormData) {
+  const actorUser = await adminActor();
+  if ("error" in actorUser) return actorUser;
+  const id = Number(formData.get("id"));
+  if (!id) return { error: "Consulta inválida." };
+  await deleteContactInquiry(id);
+  await logAudit({
+    actorEmail: actorUser.email,
+    action: "contact.delete",
+    entityType: "contactInquiry",
+    entityId: id,
+    detail: "Eliminó una consulta de contacto",
+  });
+  refresh();
+  return { ok: true };
 }
 
 export async function createPaymentAction(formData: FormData) {

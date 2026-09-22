@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { ContactForm } from "@/components/contact/ContactForm";
 import { Reveal } from "@/components/ui/Reveal";
-import { getSettings } from "@/lib/panel-data";
-import { whatsappUrl } from "@/lib/site-settings";
 
 export const metadata: Metadata = {
   title: "Contacto · Conciencia Estelar",
@@ -11,10 +9,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/contacto" },
 };
 
-export default async function ContactoPage() {
-  const settings = await getSettings();
-  const whatsappHref = whatsappUrl(settings.whatsappNumber, settings.messageContact);
-
+export default function ContactoPage() {
   return (
     <section className="min-h-screen pt-32 pb-24">
       <div className="mx-auto max-w-6xl px-6">
@@ -34,11 +29,7 @@ export default async function ContactoPage() {
         </Reveal>
         <div className="mx-auto max-w-2xl">
           <Reveal delay={0.2}>
-            <ContactForm
-              whatsappHref={whatsappHref}
-              joinTemplate={settings.messageJoinForm}
-              platformNumber={settings.whatsappNumber}
-            />
+            <ContactForm />
           </Reveal>
         </div>
       </div>

@@ -18,6 +18,7 @@ import {
   UserPlus,
   Users,
   UsersRound,
+  MessageSquare,
 } from "lucide-react";
 import { getSessionUser } from "@/lib/auth";
 import { getPanelStats, getSettings } from "@/lib/panel-data";
@@ -28,6 +29,7 @@ const icons: Record<Exclude<PanelIcon, "home">, typeof Users> = {
   audit: ClipboardList,
   settings: Settings,
   join: UserPlus,
+  inbox: MessageSquare,
   calendar: CalendarDays,
   enroll: CalendarDays,
   people: UsersRound,

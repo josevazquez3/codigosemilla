@@ -26,6 +26,7 @@ import {
   UserPlus,
   Users,
   UsersRound,
+  MessageSquare,
 } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
 import { navForRole, type PanelIcon } from "@/lib/panel-nav";
@@ -37,6 +38,7 @@ const icons: Record<PanelIcon, typeof Home> = {
   audit: ClipboardList,
   settings: Settings,
   join: UserPlus,
+  inbox: MessageSquare,
   calendar: CalendarDays,
   enroll: CalendarDays,
   people: UsersRound,

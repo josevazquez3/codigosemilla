@@ -48,7 +48,7 @@ export async function POST(request: Request) {
   const type = String(payload.type || payload.topic || "").toLowerCase();
   const requestId = request.headers.get("x-request-id") ?? "";
 
-  const signature = verifyMercadoPagoSignature(request, resourceId);
+  const signature = await verifyMercadoPagoSignature(request, resourceId);
   if (!signature.ok) {
     return new Response("invalid signature", { status: 401 });
   }

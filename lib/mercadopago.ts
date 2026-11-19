@@ -1,4 +1,5 @@
 import { createHmac, timingSafeEqual } from "crypto";
+import { getMercadoPagoSecrets } from "@/lib/mp-settings";
 
 const MP_API = "https://api.mercadopago.com";
 
@@ -53,29 +54,37 @@ export type MpPayment = {
   point_of_interaction?: { transaction_data?: { subscription_id?: string } };
 };
 
-export function isMercadoPagoConfigured() {
-  return Boolean(process.env.MP_ACCESS_TOKEN?.trim());
+export async function isMercadoPagoConfigured() {
+  const secrets = await getMercadoPagoSecrets();
+  return Boolean(secrets.accessToken);
 }
 
 export function publicSiteUrl() {
   const explicit = process.env.NEXT_PUBLIC_SITE_URL?.trim();
   if (explicit) return explicit.replace(/\/$/, "");
+  if (process.env.VERCEL_ENV === "production") {
+    return "https://www.guadalupevazquez.com.ar";
+  }
   const vercel = process.env.VERCEL_URL?.trim();
   if (vercel) return `https://${vercel.replace(/\/$/, "")}`;
   return "http://localhost:3000";
 }
 
-function accessToken() {
-  const token = process.env.MP_ACCESS_TOKEN?.trim();
-  if (!token) throw new Error("Falta MP_ACCESS_TOKEN en las variables de entorno.");
+async function accessToken() {
+  const secrets = await getMercadoPagoSecrets();
+  const token = secrets.accessToken.trim();
+  if (!token) {
+    throw new Error("Falta configurar Mercado Pago en Configuración.");
+  }
   return token;
 }
 
 async function mpFetch<T>(path: string, init?: RequestInit): Promise<T> {
+  const token = await accessToken();
   const response = await fetch(`${MP_API}${path}`, {
     ...init,
     headers: {
-      Authorization: `Bearer ${accessToken()}`,
+      Authorization: `Bearer ${token}`,
       Accept: "application/json",
       "Content-Type": "application/json",
       ...(init?.headers ?? {}),
@@ -186,8 +195,9 @@ export function webhookResourceId(payload: MpWebhookPayload) {
   return String(payload.data?.id ?? payload.id ?? "").trim();
 }
 
-export function verifyMercadoPagoSignature(request: Request, resourceId: string) {
-  const secret = process.env.MP_WEBHOOK_SECRET?.trim();
+export async function verifyMercadoPagoSignature(request: Request, resourceId: string) {
+  const secrets = await getMercadoPagoSecrets();
+  const secret = secrets.webhookSecret.trim();
   if (!secret) {
     return { ok: true, skipped: true as const };
   }

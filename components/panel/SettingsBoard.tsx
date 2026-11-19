@@ -6,10 +6,12 @@ import {
   Crown,
   ExternalLink,
   Settings,
+  Wallet,
 } from "lucide-react";
-import { saveSettingsAction } from "@/app/panel/actions";
+import { saveMercadoPagoSettingsAction, saveSettingsAction } from "@/app/panel/actions";
 import { fieldClass } from "@/components/panel/ui";
 import { WhatsAppIcon } from "@/components/ui/WhatsAppIcon";
+import type { MercadoPagoStatus } from "@/lib/mp-settings";
 import {
   applyTemplate,
   currentMonthLabel,
@@ -18,7 +20,13 @@ import {
   type SiteSettings,
 } from "@/lib/site-settings";
 
-export function SettingsBoard({ settings }: { settings: SiteSettings }) {
+export function SettingsBoard({
+  settings,
+  mercadoPago,
+}: {
+  settings: SiteSettings;
+  mercadoPago: MercadoPagoStatus;
+}) {
   const [form, setForm] = useState(settings);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState("");
@@ -61,19 +69,7 @@ export function SettingsBoard({ settings }: { settings: SiteSettings }) {
   const bankWa = whatsappUrl(form.whatsappNumber, bankPreview);
 
   return (
-    <form
-      className="space-y-6"
-      action={async (formData) => {
-        setError("");
-        formData.set("payload", JSON.stringify(form));
-        const result = await saveSettingsAction(formData);
-        if (result?.error) {
-          setError(result.error);
-          return;
-        }
-        setSaved(true);
-      }}
-    >
+    <div className="space-y-6">
       <div className="flex items-start gap-4">
         <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#e8f3e3] text-[#4f7a58]">
           <Settings size={26} />
@@ -88,6 +84,21 @@ export function SettingsBoard({ settings }: { settings: SiteSettings }) {
         </div>
       </div>
 
+      <MercadoPagoCard initial={mercadoPago} />
+
+      <form
+        className="space-y-6"
+        action={async (formData) => {
+          setError("");
+          formData.set("payload", JSON.stringify(form));
+          const result = await saveSettingsAction(formData);
+          if (result?.error) {
+            setError(result.error);
+            return;
+          }
+          setSaved(true);
+        }}
+      >
       <Card>
         <div className="grid gap-4 md:grid-cols-2">
           <TextField
@@ -303,7 +314,158 @@ export function SettingsBoard({ settings }: { settings: SiteSettings }) {
       >
         Guardar configuración
       </button>
-    </form>
+      </form>
+    </div>
+  );
+}
+
+function MercadoPagoCard({ initial }: { initial: MercadoPagoStatus }) {
+  const [status, setStatus] = useState(initial);
+  const [error, setError] = useState("");
+  const [saved, setSaved] = useState("");
+  const [pending, setPending] = useState(false);
+
+  return (
+    <Card>
+      <SectionTitle icon={<Wallet size={18} />} title="Mercado Pago">
+        Credenciales de la cuenta donde entra el dinero de las suscripciones. Usá producción
+        (APP_USR-), no test.
+      </SectionTitle>
+
+      <div className="mt-6 space-y-4">
+        {status.configured ? (
+          <div className="rounded-2xl bg-[#e8f3e3] px-4 py-3 text-sm text-[#2d4739]">
+            {status.accountLabel ? (
+              <p>
+                Los cobros van a la cuenta <strong>{status.accountLabel}</strong>
+                {status.accountEmail ? ` · ${status.accountEmail}` : ""}.
+              </p>
+            ) : (
+              <p>Mercado Pago está configurado{status.source === "env" ? " por Vercel" : ""}.</p>
+            )}
+            {status.tokenHint ? (
+              <p className="mt-1 text-xs text-[#4f7a58]">Access Token: {status.tokenHint}</p>
+            ) : null}
+          </div>
+        ) : (
+          <p className="rounded-2xl bg-[#fff8d9] px-4 py-3 text-sm text-[#6b5a2e]">
+            Todavía no hay una cuenta conectada. Pegá el Access Token de producción para cobrar
+            en tu billetera.
+          </p>
+        )}
+
+        <form
+          className="space-y-4"
+          action={async (formData) => {
+            setPending(true);
+            setError("");
+            setSaved("");
+            const result = await saveMercadoPagoSettingsAction(formData);
+            setPending(false);
+            if (result && "error" in result && result.error) {
+              setError(result.error);
+              return;
+            }
+            if (result && "status" in result && result.status) {
+              setStatus(result.status);
+              setSaved(
+                result.status.configured
+                  ? "Mercado Pago se guardó. El dinero entra a esa cuenta."
+                  : "Se quitaron las credenciales de Mercado Pago.",
+              );
+              return;
+            }
+            setSaved("Mercado Pago se guardó.");
+          }}
+        >
+          <label className="block space-y-2">
+            <span className="text-[11px] tracking-[0.2em] text-[#6f8a74] uppercase">
+              Access Token de producción
+            </span>
+            <input
+              name="accessToken"
+              type="password"
+              autoComplete="off"
+              placeholder={status.tokenConfigured ? "Dejar vacío para no cambiarlo" : "APP_USR-..."}
+              className={fieldClass}
+            />
+            <p className="text-xs text-muted-foreground">
+              Developers → tu aplicación → Credenciales de producción. El cobro entra a la
+              billetera de esa cuenta.
+            </p>
+          </label>
+          <label className="block space-y-2">
+            <span className="text-[11px] tracking-[0.2em] text-[#6f8a74] uppercase">
+              Webhook secret
+            </span>
+            <input
+              name="webhookSecret"
+              type="password"
+              autoComplete="off"
+              placeholder={status.webhookConfigured ? "Dejar vacío para no cambiarlo" : "Secret de firma"}
+              className={fieldClass}
+            />
+            <p className="text-xs text-muted-foreground">
+              En Webhooks de Mercado Pago, pegá esta URL y copiá el secret de firma.
+            </p>
+          </label>
+          <label className="block space-y-2">
+            <span className="text-[11px] tracking-[0.2em] text-[#6f8a74] uppercase">
+              URL del webhook (copiar en Mercado Pago)
+            </span>
+            <div className="flex flex-col gap-2 sm:flex-row">
+              <input readOnly value={status.webhookUrl} className={`${fieldClass} bg-[#f7faf5]`} />
+              <button
+                type="button"
+                onClick={() => navigator.clipboard.writeText(status.webhookUrl)}
+                className="rounded-full border border-[#4f7a58] px-4 py-2 text-[11px] tracking-[0.14em] text-[#2d4739] uppercase"
+              >
+                Copiar
+              </button>
+            </div>
+          </label>
+          <label className="block space-y-2">
+            <span className="text-[11px] tracking-[0.2em] text-[#6f8a74] uppercase">
+              Public Key (opcional)
+            </span>
+            <input
+              name="publicKey"
+              type="password"
+              autoComplete="off"
+              placeholder={status.publicKeyHint || "APP_USR-... (opcional)"}
+              className={fieldClass}
+            />
+          </label>
+          {error ? <p className="text-sm text-[#7a3a34]">{error}</p> : null}
+          {saved ? <p className="text-sm text-[#4f7a58]">{saved}</p> : null}
+          <div className="flex flex-wrap gap-2">
+            <button
+              type="submit"
+              disabled={pending}
+              className="rounded-full bg-[#4f7a58] px-5 py-2.5 text-xs tracking-[0.18em] text-white uppercase disabled:opacity-70"
+            >
+              {pending ? "Verificando..." : "Guardar Mercado Pago"}
+            </button>
+            {status.tokenConfigured ? (
+              <button
+                type="submit"
+                name="clear"
+                value="1"
+                disabled={pending}
+                onClick={(event) => {
+                  if (!window.confirm("¿Quitar las credenciales de Mercado Pago del panel?")) {
+                    event.preventDefault();
+                  }
+                }}
+                className="rounded-full border border-[#7a3a34] px-5 py-2.5 text-xs tracking-[0.18em] text-[#7a3a34] uppercase disabled:opacity-70"
+              >
+                Quitar cuenta
+              </button>
+            ) : null}
+          </div>
+        </form>
+      </div>
+    </Card>
   );
 }
 

@@ -72,6 +72,7 @@ import {
   type UserStatus,
 } from "@/lib/panel-data";
 import { parseBankAmount } from "@/lib/bank-extract";
+import { saveMercadoPagoSettings } from "@/lib/mp-settings";
 import { fetchLinkTitle, isDriveUrl, parseBitacoraUrls } from "@/lib/drive-title";
 import { fetchYouTubeTitle, isYouTubeUrl, youtubeWatchUrl } from "@/lib/youtube";
 import { generatePadronPassword } from "@/lib/padron";
@@ -656,6 +657,33 @@ export async function saveSettingsAction(formData: FormData) {
   });
   refresh();
   return { ok: true };
+}
+
+export async function saveMercadoPagoSettingsAction(formData: FormData) {
+  const admin = await adminActor();
+  if ("error" in admin) return { error: admin.error };
+
+  const clear = text(formData, "clear") === "1";
+  try {
+    const status = await saveMercadoPagoSettings({
+      clear,
+      accessToken: text(formData, "accessToken"),
+      webhookSecret: text(formData, "webhookSecret"),
+      publicKey: text(formData, "publicKey"),
+    });
+    await logAudit({
+      actorEmail: admin.email,
+      action: clear ? "settings.mercadopago.clear" : "settings.mercadopago.update",
+      entityType: "settings",
+      detail: clear
+        ? "Quitó las credenciales de Mercado Pago"
+        : `Actualizó Mercado Pago${status.accountLabel ? ` (${status.accountLabel})` : ""}`,
+    });
+    refresh();
+    return { ok: true as const, status };
+  } catch (error) {
+    return { error: error instanceof Error ? error.message : "No se pudo guardar Mercado Pago." };
+  }
 }
 
 function padronFromForm(formData: FormData) {

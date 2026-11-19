@@ -598,7 +598,7 @@ export async function createAssignedSubscription(input: {
   }
 
   let mpError = "";
-  if (isMercadoPagoConfigured()) {
+  if (await isMercadoPagoConfigured()) {
     try {
       const startDate = created.startDate
         ? new Date(`${created.startDate}T12:00:00-03:00`).toISOString()
@@ -626,7 +626,7 @@ export async function createAssignedSubscription(input: {
       });
     }
   } else {
-    mpError = "Falta MP_ACCESS_TOKEN. La asignación quedó guardada; configurá Mercado Pago y reenviá el enlace.";
+    mpError = "Falta configurar Mercado Pago en Configuración. La asignación quedó guardada; completá las credenciales y regenerá el enlace.";
   }
 
   await recordSubscriptionEvent({
@@ -650,7 +650,9 @@ export async function regenerateCheckout(subscriptionId: number, actorEmail: str
   const current = await getSubscriptionById(subscriptionId);
   if (!current) throw new Error("Suscripción no encontrada.");
   if (current.status === "cancelled") throw new Error("La suscripción está cancelada.");
-  if (!isMercadoPagoConfigured()) throw new Error("Falta MP_ACCESS_TOKEN.");
+  if (!(await isMercadoPagoConfigured())) {
+    throw new Error("Falta configurar Mercado Pago en Configuración.");
+  }
 
   if (current.mpPreapprovalId) {
     const remote = await getPreapproval(current.mpPreapprovalId);
@@ -820,7 +822,7 @@ export async function syncAuthorizedPayment(remote: MpAuthorizedPayment) {
 
   let payment: MpPayment | undefined;
   const paymentId = remote.payment?.id ? String(remote.payment.id) : "";
-  if (paymentId && isMercadoPagoConfigured()) {
+  if (paymentId && (await isMercadoPagoConfigured())) {
     try {
       payment = await getPayment(paymentId);
     } catch {
@@ -908,7 +910,7 @@ export async function syncPayment(remote: MpPayment) {
 
 export async function refreshSubscriptionFromMp(subscriptionId: number) {
   const current = await getSubscriptionById(subscriptionId);
-  if (!current?.mpPreapprovalId || !isMercadoPagoConfigured()) return current;
+  if (!current?.mpPreapprovalId || !(await isMercadoPagoConfigured())) return current;
   const remote = await getPreapproval(current.mpPreapprovalId);
   return persistSubscription(applyPreapproval(current, remote));
 }

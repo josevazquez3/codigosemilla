@@ -102,7 +102,7 @@ export function CobrosBoard({
 
       {!configured ? (
         <p className="rounded-2xl border border-[#ead56a] bg-[#fff8d9] px-4 py-3 text-sm text-[#6b5a2e]">
-          Falta configurar <code>MP_ACCESS_TOKEN</code>. Podés asignar suscripciones, pero el enlace de Mercado Pago se genera después.
+          Falta configurar Mercado Pago. Andá a <a href="/panel/configuracion" className="underline">Configuración</a> y cargá el Access Token de producción. Podés asignar suscripciones, pero el enlace se genera después.
         </p>
       ) : null}
 

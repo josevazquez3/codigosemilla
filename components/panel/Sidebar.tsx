@@ -27,6 +27,7 @@ import {
   Users,
   UsersRound,
   MessageSquare,
+  Repeat,
 } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
 import { navForRole, type PanelIcon } from "@/lib/panel-nav";
@@ -54,6 +55,7 @@ const icons: Record<PanelIcon, typeof Home> = {
   sparkles: Sparkles,
   crown: Crown,
   lock: Lock,
+  repeat: Repeat,
 };
 
 type SidebarProps = {

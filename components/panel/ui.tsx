@@ -48,11 +48,11 @@ export function StatusBadge({
   value: string;
 }) {
   const tone =
-    ["active", "open", "confirmed", "accepted", "paid"].includes(value)
+    ["active", "open", "confirmed", "accepted", "paid", "authorized", "approved"].includes(value)
       ? "bg-[#e8f3e3] text-[#2d4739]"
-      : ["pending", "reviewed", "invited", "waitlist", "draft"].includes(value)
+      : ["pending", "reviewed", "invited", "waitlist", "draft", "pending_authorization", "paused"].includes(value)
         ? "bg-[#f4efe2] text-[#6b5a2e]"
-        : ["overdue", "suspended", "rejected", "cancelled"].includes(value)
+        : ["overdue", "suspended", "rejected", "cancelled", "refunded"].includes(value)
           ? "bg-[#f8e6e4] text-[#7a3a34]"
           : "bg-[#eef3ea] text-[#4f7a58]";
 
@@ -66,6 +66,11 @@ export function StatusBadge({
     cancelled: "Cancelado",
     confirmed: "Confirmada",
     pending: "Pendiente",
+    pending_authorization: "Pendiente de autorización",
+    authorized: "Autorizada",
+    paused: "Pausada",
+    approved: "Aprobado",
+    refunded: "Reembolsado",
     waitlist: "Lista de espera",
     reviewed: "En revisión",
     accepted: "Aceptada",

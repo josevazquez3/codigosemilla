@@ -19,6 +19,7 @@ import {
   Users,
   UsersRound,
   MessageSquare,
+  Repeat,
 } from "lucide-react";
 import { getSessionUser } from "@/lib/auth";
 import { getPanelStats, getSettings } from "@/lib/panel-data";
@@ -45,6 +46,7 @@ const icons: Record<Exclude<PanelIcon, "home">, typeof Users> = {
   sparkles: Sparkles,
   crown: Crown,
   lock: Lock,
+  repeat: Repeat,
 };
 
 export default async function PanelHomePage() {

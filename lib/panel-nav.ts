@@ -19,7 +19,8 @@ export type PanelIcon =
   | "sparkles"
   | "crown"
   | "lock"
-  | "inbox";
+  | "inbox"
+  | "repeat";
 
 export type PanelLink = {
   href: string;
@@ -161,6 +162,25 @@ export const panelNav: PanelNavItem[] = [
     ],
   },
   {
+    label: "Cobros y Suscripciones",
+    icon: "repeat",
+    description: "Débitos automáticos con Mercado Pago y seguimiento de autorizaciones.",
+    children: [
+      {
+        href: "/panel/cobros",
+        label: "Cobros y Suscripciones",
+        description: "Asigná, seguí y administrá suscripciones de Mercado Pago.",
+        icon: "repeat",
+      },
+      {
+        href: "/panel/cobros/mis-suscripciones",
+        label: "Mis suscripciones",
+        description: "Autorizá y consultá tus débitos automáticos.",
+        icon: "card",
+      },
+    ],
+  },
+  {
     label: "Tesorería",
     icon: "treasury",
     description: "Extracto, pagos, transferencias e historial económico.",
@@ -224,6 +244,7 @@ const usuarioPaths = [
   "/panel/activaciones",
   "/panel/inscripcion-encuentros",
   "/panel/tesoreria/adjuntar-pago",
+  "/panel/cobros/mis-suscripciones",
 ];
 
 const membresiaPaths = [
@@ -245,6 +266,9 @@ export function isAdminRole(role?: string | null) {
 export function canAccessPath(role: PanelRole, path: string) {
   if (isAdminRole(role)) return true;
   if (path.startsWith("/panel/inscripcion-encuentros/inscriptos")) return false;
+  if (pathMatches(path, "/panel/cobros") && !pathMatches(path, "/panel/cobros/mis-suscripciones")) {
+    return false;
+  }
   if (pathMatches(path, "/panel/sala-especial")) return role === "Usuario Membresía";
   const allowed = role === "Usuario Membresía" ? membresiaPaths : usuarioPaths;
   return allowed.some((prefix) => pathMatches(path, prefix));

@@ -9,7 +9,7 @@ import { images } from "@/lib/images";
 export const metadata: Metadata = {
   title: "Código Semilla · Transformación, Integración y Activación",
   description:
-    "Código Semilla es una plataforma catalizadora de procesos. 11 semanas para activar progresivamente los 13 nodos y encarnar tu código original.",
+    "Código Semilla es una plataforma catalizadora de procesos. 12 semanas para activar progresivamente los 13 nodos y encarnar tu código original.",
   alternates: { canonical: "/codigo-semilla" },
 };
 
@@ -30,7 +30,7 @@ export default function CodigoSemillaPage() {
         <p className="mx-auto mb-8 max-w-3xl font-heading text-lg font-light text-primary-foreground/90 italic md:text-2xl">
           Arquitectura Viva: Transformación, Integración y Activación
         </p>
-        <div className="mx-auto max-w-3xl space-y-5 text-base leading-relaxed text-primary-foreground/80 md:text-lg">
+        <div className="mx-auto max-w-3xl space-y-5 text-lg leading-relaxed text-primary-foreground/80 md:text-2xl">
           <p>
             Una{" "}
             <span className="text-accent">plataforma catalizadora de procesos</span>.
@@ -43,7 +43,7 @@ export default function CodigoSemillaPage() {
             procesos profundos de integración en múltiples niveles, combinando
             encuentros individuales, grupos reducidos y trabajo en red.
           </p>
-          <p className="pt-2 font-heading text-xl text-primary-foreground italic md:text-2xl">
+          <p className="pt-2 font-heading text-2xl text-primary-foreground italic md:text-3xl">
             La experiencia no busca solo comprender. Busca que puedas atravesar,
             sostener y encarnar tu código original en la materia.
           </p>
@@ -52,7 +52,7 @@ export default function CodigoSemillaPage() {
           {codigoSemilla.heroPills.map((pill) => (
             <span
               key={pill}
-              className="rounded-full border border-accent/40 bg-primary-foreground/5 px-4 py-2 text-xs tracking-wider text-primary-foreground/90 uppercase backdrop-blur-sm md:text-sm"
+              className="rounded-full border border-accent/40 bg-primary-foreground/5 px-4 py-2 text-sm tracking-wider text-primary-foreground/90 uppercase backdrop-blur-sm md:text-base"
             >
               ✦ {pill}
             </span>
@@ -84,7 +84,7 @@ export default function CodigoSemillaPage() {
         <div className="mx-auto max-w-4xl px-6">
           <Reveal>
             <div className="mb-12 text-center">
-              <p className="mb-4 text-xs uppercase tracking-[0.3em] text-accent">
+              <p className="mb-5 text-base font-bold uppercase tracking-[0.28em] text-[#5c3d2e] md:text-xl">
                 ✦ Qué es
               </p>
               <h2 className="font-heading text-4xl font-light leading-tight md:text-5xl">
@@ -95,7 +95,7 @@ export default function CodigoSemillaPage() {
                 de la conciencia
               </h2>
             </div>
-            <div className="space-y-5 leading-relaxed text-muted-foreground">
+            <div className="space-y-5 text-xl font-bold leading-relaxed text-muted-foreground md:text-2xl">
               <p>
                 Un espacio donde la transformación se vuelve real y verificable en
                 la experiencia. Aquí no se avanza desde lo conceptual:{" "}
@@ -111,7 +111,7 @@ export default function CodigoSemillaPage() {
                 propia información para aportar al campo. Todos funcionan como nodos
                 activos de una misma célula viva.
               </p>
-              <p className="pt-2 font-heading text-xl text-foreground italic">
+              <p className="pt-2 font-heading text-2xl font-bold text-foreground italic md:text-3xl">
                 No es teoría. Es práctica viva.
                 <br />
                 Observación. Integración. Presencia.
@@ -128,11 +128,11 @@ export default function CodigoSemillaPage() {
         </div>
       </section>
 
-      <section className="relative overflow-hidden bg-muted/30 py-24">
+      <section className="py-24">
         <div className="mx-auto max-w-4xl px-6">
           <Reveal>
             <div className="mb-12 text-center">
-              <p className="mb-4 text-xs uppercase tracking-[0.3em] text-accent">
+              <p className="mb-5 text-base font-bold uppercase tracking-[0.28em] text-[#5c3d2e] md:text-xl">
                 ✦ Arquitectura del proceso
               </p>
               <h2 className="font-heading text-4xl font-light md:text-5xl">
@@ -142,7 +142,7 @@ export default function CodigoSemillaPage() {
                 </span>
               </h2>
             </div>
-            <div className="space-y-5 leading-relaxed text-muted-foreground">
+            <div className="space-y-5 text-xl font-bold leading-relaxed text-muted-foreground md:text-2xl">
               <p>
                 Código Semilla se estructura a través de la activación progresiva de
                 los 13 nodos. Los nodos no se activan de manera lineal ni fija.
@@ -157,7 +157,7 @@ export default function CodigoSemillaPage() {
                 conciencia que reorganizan la percepción, los vínculos, la dirección
                 interna y la forma de habitar la realidad.
               </p>
-              <p className="pt-2 font-heading text-xl text-foreground italic">
+              <p className="pt-2 font-heading text-2xl font-bold text-foreground italic md:text-3xl">
                 No se trata solo de comprender nuevas frecuencias.
                 <br />
                 Se trata de poder habitarlas en la materia.
@@ -171,7 +171,7 @@ export default function CodigoSemillaPage() {
         <div className="mx-auto max-w-5xl px-6">
           <Reveal>
             <div className="mb-16 text-center">
-              <p className="mb-4 text-xs uppercase tracking-[0.3em] text-accent">
+              <p className="mb-5 text-base font-bold uppercase tracking-[0.28em] text-[#5c3d2e] md:text-xl">
                 ✦ Los nodos
               </p>
               <h2 className="font-heading text-4xl font-light md:text-5xl">
@@ -181,13 +181,13 @@ export default function CodigoSemillaPage() {
             </div>
           </Reveal>
           <Reveal delay={0.1}>
-            <div className="mx-auto mb-16 flex max-w-3xl flex-wrap justify-center gap-4">
+            <div className="mx-auto mb-16 flex max-w-3xl flex-wrap justify-center gap-5">
               {Array.from({ length: 13 }).map((_, index) => (
                 <div
                   key={index}
-                  className="relative flex h-16 w-16 cursor-default items-center justify-center rounded-full border border-accent/40 font-heading text-accent transition-all duration-500 hover:bg-accent hover:text-primary-foreground"
+                  className="relative flex h-16 w-16 cursor-default items-center justify-center rounded-full border-2 border-[#5c3d2e] bg-accent font-heading text-[#5c3d2e] transition-all duration-300 hover:scale-125 hover:bg-[#9fd4ea] hover:text-[#2c5f73]"
                 >
-                  <span className="text-sm">
+                  <span className="text-base font-bold">
                     {String(index + 1).padStart(2, "0")}
                   </span>
                 </div>
@@ -195,12 +195,11 @@ export default function CodigoSemillaPage() {
             </div>
           </Reveal>
           <Reveal delay={0.2}>
-            <div className="mx-auto max-w-3xl space-y-5 leading-relaxed text-muted-foreground">
+            <div className="mx-auto max-w-3xl space-y-5 text-xl font-normal leading-relaxed text-black md:text-2xl">
               <p>
-                Los nodos son{" "}
-                <span className="text-foreground">centros de conciencia</span> que se
-                encuentran más allá del cuerpo físico y funcionan como puentes de
-                integración entre distintas capas de percepción y experiencia.
+                Los nodos son centros de conciencia que se encuentran más allá del
+                cuerpo físico y funcionan como puentes de integración entre distintas
+                capas de percepción y experiencia.
               </p>
               <p>
                 Su activación permite ampliar la conexión con el campo cuántico y
@@ -219,7 +218,7 @@ export default function CodigoSemillaPage() {
                 biología, el sistema energético y la forma en la que la experiencia
                 humana es vivida e integrada.
               </p>
-              <p className="text-foreground">
+              <p>
                 Por eso el trabajo no queda solo en lo sutil. El foco está en
                 traducir aquello que se activa en cambios concretos y sostenibles
                 dentro de la vida cotidiana.
@@ -229,11 +228,11 @@ export default function CodigoSemillaPage() {
         </div>
       </section>
 
-      <section className="bg-muted/30 py-24">
+      <section className="py-24">
         <div className="mx-auto max-w-6xl px-6">
           <Reveal>
             <div className="mb-16 text-center">
-              <p className="mb-4 text-xs uppercase tracking-[0.3em] text-accent">
+              <p className="mb-5 text-base font-bold uppercase tracking-[0.28em] text-[#5c3d2e] md:text-xl">
                 ✦ Las etapas del recorrido
               </p>
               <h2 className="font-heading text-4xl font-light md:text-5xl">
@@ -243,15 +242,15 @@ export default function CodigoSemillaPage() {
           </Reveal>
           <div className="grid gap-6 md:grid-cols-3">
             {codigoSemilla.stages.map((stage, index) => (
-              <Reveal key={stage.n} delay={index * 0.1}>
-                <div className="h-full rounded-2xl border border-border bg-card p-8 transition-all duration-500 hover:border-accent/50">
-                  <span className="font-heading text-5xl font-light text-accent/60">
+              <Reveal key={stage.n} delay={index * 0.1} className="h-full">
+                <div className="group h-full overflow-hidden rounded-2xl border-2 border-border bg-card p-8 shadow-sm transition-all duration-500 ease-out hover:-translate-y-3 hover:scale-[1.03] hover:border-[#5c3d2e] hover:bg-accent hover:shadow-2xl hover:shadow-[#5c3d2e]/30">
+                  <span className="font-heading text-5xl font-light text-accent/60 transition-colors duration-500 group-hover:text-accent-foreground/40">
                     {stage.n}
                   </span>
-                  <h3 className="mt-4 mb-4 font-heading text-2xl font-light">
+                  <h3 className="mt-4 mb-4 font-heading text-2xl font-light text-foreground transition-colors duration-500 group-hover:text-accent-foreground">
                     {stage.title}
                   </h3>
-                  <p className="text-sm leading-relaxed text-muted-foreground">
+                  <p className="text-sm leading-relaxed text-muted-foreground transition-colors duration-500 group-hover:text-accent-foreground/85">
                     {stage.desc}
                   </p>
                 </div>
@@ -265,11 +264,11 @@ export default function CodigoSemillaPage() {
         <div className="mx-auto max-w-5xl px-6">
           <Reveal>
             <div className="mb-16 text-center">
-              <p className="mb-4 text-xs uppercase tracking-[0.3em] text-accent">
+              <p className="mb-5 text-base font-bold uppercase tracking-[0.28em] text-[#5c3d2e] md:text-xl">
                 ✦ Cómo funciona
               </p>
               <h2 className="font-heading text-4xl font-light md:text-5xl">
-                <span className="italic text-primary">11 semanas</span> de proceso
+                <span className="italic text-primary">12 semanas</span> de proceso
                 vivo
               </h2>
             </div>
@@ -278,29 +277,33 @@ export default function CodigoSemillaPage() {
             {codigoSemilla.howItWorks.map((item, index) => {
               const Icon = howIcons[index] ?? Sparkles;
               return (
-                <Reveal key={item} delay={index * 0.05}>
-                  <div className="flex items-start gap-4 rounded-xl border border-border bg-card p-6 transition-colors hover:border-accent/40">
-                    <Icon className="mt-1 shrink-0 text-accent" size={22} />
-                    <p className="text-sm leading-relaxed text-foreground">{item}</p>
+                <Reveal key={item} delay={index * 0.05} className="h-full">
+                  <div className="group flex h-full items-start gap-4 rounded-2xl border-2 border-border bg-card p-6 shadow-sm transition-all duration-500 ease-out hover:-translate-y-3 hover:scale-[1.03] hover:border-[#5c3d2e] hover:bg-accent hover:shadow-2xl hover:shadow-[#5c3d2e]/30">
+                    <Icon
+                      className="mt-1 shrink-0 text-accent transition-colors duration-500 group-hover:text-accent-foreground"
+                      size={24}
+                    />
+                    <p className="text-base leading-relaxed text-foreground transition-colors duration-500 group-hover:text-accent-foreground md:text-lg">
+                      {item}
+                    </p>
                   </div>
                 </Reveal>
               );
             })}
           </div>
           <Reveal delay={0.2}>
-            <div className="mx-auto max-w-3xl space-y-4 text-center leading-relaxed text-muted-foreground">
+            <div className="mx-auto max-w-3xl space-y-5 text-center text-xl leading-relaxed text-black md:text-2xl">
               <p>
-                El proceso también incluye{" "}
-                <span className="text-foreground">activaciones y canalizaciones</span>
-                , masterclasses complementarias, material de anclaje y
+                El proceso también incluye activaciones y canalizaciones,
+                masterclasses complementarias, material de anclaje y
                 acompañamiento continuo entre encuentros.
               </p>
-              <p className="pt-2 font-heading text-xl text-foreground italic">
+              <p className="pt-2 font-heading text-2xl text-black italic md:text-3xl">
                 Cada edición es única y se abre según quienes participan.
               </p>
               <p>
                 Más que un grupo, muchas personas encuentran aquí una{" "}
-                <span className="italic text-accent">familia álmica</span>: un
+                <span className="italic text-primary">familia álmica</span>: un
                 espacio de resonancia, contención y expansión compartida.
               </p>
             </div>
@@ -323,12 +326,16 @@ export default function CodigoSemillaPage() {
               </h2>
             </div>
           </Reveal>
-          <div className="mx-auto grid max-w-4xl gap-3 sm:grid-cols-2">
+          <div className="mx-auto grid max-w-4xl gap-3 py-3 sm:grid-cols-2">
             {codigoSemilla.possibles.map((item, index) => (
-              <Reveal key={item} delay={index * 0.04}>
-                <div className="flex items-start gap-3 rounded-xl border border-primary-foreground/15 bg-primary-foreground/5 p-4 backdrop-blur-sm">
-                  <span className="mt-0.5 shrink-0 text-accent">✦</span>
-                  <p className="text-sm text-primary-foreground/90">{item}</p>
+              <Reveal key={item} delay={index * 0.04} className="h-full">
+                <div className="group flex h-full items-start gap-3 rounded-xl border-2 border-primary-foreground/15 bg-primary-foreground/5 p-4 shadow-sm backdrop-blur-sm transition-all duration-500 ease-out hover:-translate-y-3 hover:scale-[1.03] hover:border-[#5c3d2e] hover:bg-accent hover:shadow-2xl hover:shadow-[#5c3d2e]/30">
+                  <span className="mt-0.5 shrink-0 text-accent transition-colors duration-500 group-hover:text-accent-foreground">
+                    ✦
+                  </span>
+                  <p className="text-sm text-primary-foreground/90 transition-colors duration-500 group-hover:text-accent-foreground">
+                    {item}
+                  </p>
                 </div>
               </Reveal>
             ))}
@@ -347,14 +354,14 @@ export default function CodigoSemillaPage() {
         <div className="mx-auto max-w-5xl px-6">
           <Reveal>
             <div className="mb-16 text-center">
-              <p className="mb-4 text-xs uppercase tracking-[0.3em] text-accent">
+              <p className="mb-5 text-base font-bold uppercase tracking-[0.28em] text-[#5c3d2e] md:text-xl">
                 ✦ Herramientas y soporte
               </p>
               <h2 className="font-heading text-4xl font-light md:text-5xl">
                 Todo lo canalizado se{" "}
                 <span className="italic text-primary">traduce, se ordena y se baja</span>
               </h2>
-              <p className="mx-auto mt-6 max-w-2xl leading-relaxed text-muted-foreground">
+              <p className="mx-auto mt-6 max-w-2xl text-xl leading-relaxed text-black md:text-2xl">
                 La información no queda solo en lo energético. Se vuelve clara,
                 aplicable e integrable en la vida cotidiana. Todos los encuentros
                 quedan grabados y el proceso continúa integrándose entre encuentro y
@@ -366,7 +373,7 @@ export default function CodigoSemillaPage() {
             {codigoSemilla.tools.map((tool) => (
               <span
                 key={tool}
-                className="rounded-full border border-accent/40 bg-card px-5 py-2.5 text-sm text-foreground transition-colors hover:bg-accent/10"
+                className="rounded-full border-2 border-border bg-card px-5 py-2.5 text-base text-black shadow-sm transition-all duration-500 ease-out hover:-translate-y-2 hover:scale-105 hover:border-[#5c3d2e] hover:bg-accent hover:text-accent-foreground hover:shadow-2xl hover:shadow-[#5c3d2e]/30 md:text-lg"
               >
                 ✦ {tool}
               </span>
@@ -375,11 +382,11 @@ export default function CodigoSemillaPage() {
         </div>
       </section>
 
-      <section className="bg-muted/30 py-24">
+      <section className="py-24">
         <div className="mx-auto max-w-4xl px-6">
           <Reveal>
             <div className="mb-12 text-center">
-              <p className="mb-4 text-xs uppercase tracking-[0.3em] text-accent">
+              <p className="mb-5 text-base font-bold uppercase tracking-[0.28em] text-[#5c3d2e] md:text-xl">
                 ✦ Para quién es
               </p>
               <h2 className="font-heading text-4xl font-light md:text-5xl">
@@ -387,11 +394,10 @@ export default function CodigoSemillaPage() {
                 <span className="italic text-primary">llegó el momento</span>
               </h2>
             </div>
-            <div className="space-y-5 text-base leading-relaxed text-muted-foreground">
+            <div className="space-y-5 text-xl leading-relaxed text-black md:text-2xl">
               <p>
-                Para quienes sienten que llegó el momento de atravesar una{" "}
-                <span className="text-foreground">transformación profunda</span> en
-                su forma de habitar la vida.
+                Para quienes sienten que llegó el momento de atravesar una
+                transformación profunda en su forma de habitar la vida.
               </p>
               <p>
                 Para quienes saben que existe una versión más alineada disponible y
@@ -400,10 +406,7 @@ export default function CodigoSemillaPage() {
               <p>
                 Para quienes buscan transformar su realidad, comprender el movimiento
                 del holograma y convertirse en{" "}
-                <span className="italic text-foreground">
-                  alquimistas de su propia experiencia
-                </span>
-                .
+                <span className="italic">alquimistas de su propia experiencia</span>.
               </p>
               <p>
                 Para los seres que sienten el llamado a recordar quiénes son,
@@ -412,7 +415,7 @@ export default function CodigoSemillaPage() {
               </p>
               <p>
                 Y para quienes desean formar parte de una{" "}
-                <span className="text-accent">red con propósito</span>, donde la
+                <span className="italic">red con propósito</span>, donde la
                 transformación individual también impacta en lo colectivo.
               </p>
             </div>

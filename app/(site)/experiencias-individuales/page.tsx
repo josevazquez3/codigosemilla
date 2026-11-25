@@ -47,7 +47,7 @@ export default function ExperienciasPage() {
         <div className="mx-auto max-w-3xl px-6">
           <Reveal>
             <div className="mb-10 text-center">
-              <p className="mb-4 text-xs uppercase tracking-[0.3em] text-accent">
+              <p className="mb-5 text-base font-bold uppercase tracking-[0.28em] text-[#5c3d2e] md:text-xl">
                 Cupos limitados
               </p>
               <h2 className="font-heading text-3xl font-light leading-tight md:text-5xl">
@@ -55,7 +55,7 @@ export default function ExperienciasPage() {
                 <span className="italic text-primary">limitada cada mes</span>
               </h2>
             </div>
-            <div className="space-y-5 leading-relaxed text-muted-foreground">
+            <div className="space-y-5 text-xl leading-relaxed text-black md:text-2xl">
               <p>
                 Cada encuentro requiere presencia, lectura profunda y
                 acompañamiento personalizado, por eso la disponibilidad es reducida
@@ -67,7 +67,7 @@ export default function ExperienciasPage() {
                 partir de la lectura integral del sistema y de la información
                 disponible en el campo en ese momento.
               </p>
-              <p className="text-foreground">
+              <p>
                 No se trata solo de comprender. Se trata de identificar qué está
                 organizando hoy tu experiencia y acompañar movimientos concretos de
                 transformación en la materia.
@@ -79,7 +79,7 @@ export default function ExperienciasPage() {
 
       <section
         id="experiencias"
-        className="border-y border-border bg-muted/30 py-12"
+        className="border-y border-border py-12"
       >
         <div className="mx-auto max-w-6xl px-6">
           <div className="flex flex-wrap justify-center gap-3 md:gap-6">
@@ -87,7 +87,7 @@ export default function ExperienciasPage() {
               <a
                 key={experience.id}
                 href={`#${experience.id}`}
-                className="rounded-full border border-border px-4 py-2 text-xs tracking-wider text-muted-foreground uppercase transition-colors hover:border-accent/50 hover:text-accent md:text-sm"
+                className="rounded-full border-2 border-border bg-card px-5 py-2.5 text-sm font-medium tracking-wider text-black uppercase shadow-sm transition-all duration-500 ease-out hover:-translate-y-2 hover:scale-105 hover:border-[#5c3d2e] hover:bg-accent hover:text-accent-foreground hover:shadow-2xl hover:shadow-[#5c3d2e]/30 md:text-base"
               >
                 {experience.title}
               </a>
@@ -100,12 +100,12 @@ export default function ExperienciasPage() {
         <section
           key={experience.id}
           id={experience.id}
-          className={`scroll-mt-24 py-24 lg:py-32 ${index % 2 === 1 ? "bg-muted/30" : ""}`}
+          className="scroll-mt-24 py-24 lg:py-32"
         >
           <div className="mx-auto max-w-5xl px-6">
             <Reveal>
               <div className="mb-12 text-center">
-                <p className="mb-3 text-xs uppercase tracking-[0.3em] text-accent">
+                <p className="mb-5 text-base font-bold uppercase tracking-[0.28em] text-[#5c3d2e] md:text-xl">
                   {experience.subtitle}
                 </p>
                 <h2 className="font-heading text-4xl font-light leading-tight md:text-5xl">
@@ -114,37 +114,30 @@ export default function ExperienciasPage() {
               </div>
             </Reveal>
             <Reveal delay={0.1}>
-              <div className="mx-auto mb-16 max-w-3xl space-y-5 leading-relaxed text-muted-foreground">
-                {experience.paragraphs.map((paragraph, paragraphIndex) => (
-                  <p
-                    key={paragraph}
-                    className={
-                      paragraphIndex === experience.paragraphs.length - 1
-                        ? "text-foreground"
-                        : ""
-                    }
-                  >
-                    {paragraph}
-                  </p>
+              <div className="mx-auto mb-16 max-w-3xl space-y-5 text-xl leading-relaxed text-black md:text-2xl">
+                {experience.paragraphs.map((paragraph) => (
+                  <p key={paragraph}>{paragraph}</p>
                 ))}
               </div>
             </Reveal>
             <Reveal delay={0.15}>
-              <p className="mb-6 text-center text-xs uppercase tracking-[0.3em] text-accent">
+              <p className="mb-6 text-center text-base font-bold uppercase tracking-[0.28em] text-[#5c3d2e] md:text-xl">
                 Modalidad
               </p>
               <div className="mb-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {experience.modalidad.map((item) => (
                   <div
                     key={item}
-                    className="flex items-start gap-3 rounded-xl border border-border bg-background/80 p-5 transition-colors hover:border-accent/50 hover:bg-accent/25"
+                    className="group flex h-full items-start gap-3 rounded-2xl border-2 border-border bg-card p-5 shadow-sm transition-all duration-500 ease-out hover:-translate-y-3 hover:scale-[1.03] hover:border-[#5c3d2e] hover:bg-accent hover:shadow-2xl hover:shadow-[#5c3d2e]/30"
                   >
                     <Sparkles
-                      className="mt-0.5 shrink-0 text-accent"
-                      size={20}
+                      className="mt-0.5 shrink-0 text-accent transition-colors duration-500 group-hover:text-accent-foreground"
+                      size={22}
                       strokeWidth={1.5}
                     />
-                    <p className="text-sm leading-relaxed text-foreground">{item}</p>
+                    <p className="text-base leading-relaxed text-black transition-colors duration-500 group-hover:text-accent-foreground md:text-lg">
+                      {item}
+                    </p>
                   </div>
                 ))}
               </div>
@@ -152,10 +145,10 @@ export default function ExperienciasPage() {
             {experience.extra ? (
               <Reveal delay={0.2}>
                 <div className="mb-12 rounded-2xl border border-accent/20 bg-gradient-to-br from-accent/10 to-primary/5 p-8">
-                  <h3 className="mb-3 font-heading text-2xl font-light text-foreground">
+                  <h3 className="mb-3 font-heading text-3xl font-light text-foreground md:text-4xl">
                     {experience.extra.title}
                   </h3>
-                  <p className="leading-relaxed text-muted-foreground">
+                  <p className="text-xl leading-relaxed text-muted-foreground md:text-2xl">
                     {experience.extra.text}
                   </p>
                 </div>
@@ -165,7 +158,7 @@ export default function ExperienciasPage() {
               <Reveal delay={0.2}>
                 <div className="mx-auto mb-10 grid max-w-3xl gap-4 sm:grid-cols-2">
                   <div className="rounded-2xl border border-accent/20 bg-gradient-to-br from-accent/10 to-primary/5 p-8 text-center">
-                    <p className="mb-2 text-xs uppercase tracking-[0.3em] text-accent">
+                    <p className="mb-2 text-sm font-bold uppercase tracking-[0.28em] text-[#5c3d2e] md:text-base">
                       Argentina
                     </p>
                     <p className="font-heading text-4xl font-light text-foreground">
@@ -173,7 +166,7 @@ export default function ExperienciasPage() {
                     </p>
                   </div>
                   <div className="rounded-2xl border border-accent/20 bg-gradient-to-br from-primary/5 to-accent/10 p-8 text-center">
-                    <p className="mb-2 text-xs uppercase tracking-[0.3em] text-accent">
+                    <p className="mb-2 text-sm font-bold uppercase tracking-[0.28em] text-[#5c3d2e] md:text-base">
                       Internacional
                     </p>
                     <p className="font-heading text-4xl font-light text-foreground">
@@ -197,11 +190,11 @@ export default function ExperienciasPage() {
         </section>
       ))}
 
-      <section className="bg-muted/30 py-24 lg:py-32">
+      <section className="py-24 lg:py-32">
         <div className="mx-auto max-w-4xl px-6">
           <Reveal>
             <div className="mb-12 text-center">
-              <p className="mb-4 text-xs uppercase tracking-[0.3em] text-accent">
+              <p className="mb-5 text-base font-bold uppercase tracking-[0.28em] text-[#5c3d2e] md:text-xl">
                 Iniciación · Para quién es
               </p>
               <h2 className="font-heading text-4xl font-light leading-tight md:text-5xl">
@@ -213,9 +206,11 @@ export default function ExperienciasPage() {
           <div className="space-y-4">
             {iniciacionForWho.map((item, index) => (
               <Reveal key={item} delay={index * 0.05}>
-                <div className="flex items-start gap-3 rounded-xl border border-border bg-background p-5">
-                  <span className="mt-0.5 shrink-0 text-lg text-accent">✦</span>
-                  <p className="text-sm leading-relaxed text-foreground md:text-base">
+                <div className="group flex items-start gap-3 rounded-2xl border-2 border-border bg-card p-5 shadow-sm transition-all duration-500 ease-out hover:-translate-y-2 hover:scale-[1.02] hover:border-[#5c3d2e] hover:bg-accent hover:shadow-2xl hover:shadow-[#5c3d2e]/30">
+                  <span className="mt-0.5 shrink-0 text-lg text-accent transition-colors duration-500 group-hover:text-accent-foreground">
+                    ✦
+                  </span>
+                  <p className="text-base leading-relaxed text-black transition-colors duration-500 group-hover:text-accent-foreground md:text-lg">
                     {item}
                   </p>
                 </div>
@@ -246,7 +241,7 @@ export default function ExperienciasPage() {
               <span className="italic text-accent">ver con claridad</span> lo que
               hoy busca movimiento
             </h2>
-            <p className="mb-10 leading-relaxed text-primary-foreground/70">
+            <p className="mb-10 text-xl leading-relaxed text-primary-foreground/70 md:text-2xl">
               Los cupos son limitados cada mes. Escribime y vemos juntos qué
               experiencia acompaña mejor el momento que estás atravesando.
             </p>

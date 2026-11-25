@@ -4,7 +4,8 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 
 const FILES = [
-  "portrait.jpeg",
+  "portrait-guada.jpg",
+  "portrait-forest.jpg",
   "inspo-1.jpeg",
   "inspo-2.jpeg",
   "logo-white.png",

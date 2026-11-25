@@ -16,6 +16,7 @@ import {
   createApplicationAction,
   createUserFromApplicationAction,
   deleteApplicationAction,
+  deleteApplicationsAction,
   reviewApplicationAction,
   updateApplicationAction,
 } from "@/app/panel/actions";
@@ -41,6 +42,7 @@ export function JoinBoard({
   const [kind, setKind] = useState<FilterKind>("all");
   const [selected, setSelected] = useState<Record<number, boolean>>({});
   const [drawer, setDrawer] = useState<"create" | PanelApplication | null>(null);
+  const [deleting, setDeleting] = useState(false);
   const existingEmails = useMemo(
     () => new Set(users.map((user) => user.email.toLowerCase())),
     [users],
@@ -61,6 +63,7 @@ export function JoinBoard({
   }, [applications, existingEmails, kind, onlyUsers, query]);
 
   const selectedRows = filtered.filter((item) => selected[item.id]);
+  const selectedCount = selectedRows.length;
   const allVisibleSelected = filtered.length > 0 && filtered.every((item) => selected[item.id]);
 
   function toggleAll(next: boolean) {
@@ -110,6 +113,23 @@ export function JoinBoard({
     link.download = "quiero-unirme.csv";
     link.click();
     URL.revokeObjectURL(link.href);
+  }
+
+  async function deleteSelected() {
+    if (!selectedCount || deleting) return;
+    const label =
+      selectedCount === 1 ? "la solicitud seleccionada" : `las ${selectedCount} solicitudes seleccionadas`;
+    if (!window.confirm(`¿Eliminar ${label}? Esta acción no se puede deshacer.`)) return;
+    setDeleting(true);
+    const formData = new FormData();
+    formData.set("ids", selectedRows.map((item) => item.id).join(","));
+    const result = await deleteApplicationsAction(formData);
+    setDeleting(false);
+    if (result && "error" in result && result.error) {
+      window.alert(result.error);
+      return;
+    }
+    setSelected({});
   }
 
   return (
@@ -187,6 +207,21 @@ export function JoinBoard({
             <FileDown size={14} />
             Exportar
           </button>
+          {selectedCount > 0 ? (
+            <button
+              type="button"
+              onClick={deleteSelected}
+              disabled={deleting}
+              className="inline-flex items-center gap-2 rounded-full border border-[#7a3a34] bg-[#f8e6e4] px-4 py-2.5 text-[11px] tracking-[0.16em] text-[#7a3a34] uppercase hover:bg-[#f3d4d0] disabled:opacity-70"
+            >
+              <Trash2 size={14} />
+              {deleting
+                ? "Eliminando..."
+                : selectedCount === 1
+                  ? "Eliminar seleccionada"
+                  : `Eliminar seleccionadas (${selectedCount})`}
+            </button>
+          ) : null}
         </div>
       </div>
 

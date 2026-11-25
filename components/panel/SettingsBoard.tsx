@@ -54,13 +54,6 @@ export function SettingsBoard({
     celular: "221 555-1234",
     numeroPlataforma: form.whatsappNumber,
   });
-  const eventPreview = applyTemplate(form.messageEventRegistration, {
-    nombres: "María",
-    apellidos: "García",
-    encuentro: "Seminario de Luna",
-    celular: "221 555-1234",
-    numeroPlataforma: form.whatsappNumber,
-  });
   const contactWa = whatsappUrl(form.whatsappNumber, form.messageContact);
   const joinWa = whatsappUrl(
     form.whatsappNumber,
@@ -251,24 +244,6 @@ export function SettingsBoard({
         hint="Mensaje de confirmación al enviar el formulario. Podés usar {nombres}, {apellidos}, {celular} y {numeroPlataforma}."
         preview={joinFormPreview}
         sample={`Nombres: María · Apellidos: García · Celular: 221 555-1234 · Nº plataforma: ${form.whatsappNumber}`}
-      />
-
-      <TemplateCard
-        title="Usuarios inscriptos encuentros"
-        description="Mensaje al contactar desde Inscripción Encuentros. Insertá los campos con un clic."
-        label="Usuarios inscriptos encuentros"
-        value={form.messageEventRegistration}
-        onChange={(value) => update("messageEventRegistration", value)}
-        fields={[
-          { token: "{nombres}", label: "Nombres" },
-          { token: "{apellidos}", label: "Apellidos" },
-          { token: "{encuentro}", label: "Encuentro" },
-          { token: "{celular}", label: "Celular" },
-          { token: "{numeroPlataforma}", label: "Nº plataforma" },
-        ]}
-        hint="Podés usar {nombres}, {apellidos}, {encuentro}, {celular} y {numeroPlataforma}."
-        preview={eventPreview}
-        sample="Nombres: María · Encuentro: Seminario de Luna"
       />
 
       <Card>

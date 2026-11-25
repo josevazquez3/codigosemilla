@@ -6,6 +6,7 @@ import {
   cancelRegistration,
   createApplication,
   deleteApplication,
+  deleteApplications,
   getApplicationById,
   updateApplication,
   addCarouselSlide,
@@ -17,6 +18,7 @@ import {
   createBankMovement,
   createPadronEntry,
   deleteBankMovement,
+  deletePadronEntries,
   deletePadronEntry,
   importBankMovements,
   importPadronEntries,
@@ -479,6 +481,24 @@ export async function deleteApplicationAction(formData: FormData) {
   return { ok: true };
 }
 
+export async function deleteApplicationsAction(formData: FormData) {
+  const actorUser = await actor();
+  const ids = text(formData, "ids")
+    .split(",")
+    .map((value) => Number(value))
+    .filter((id) => Number.isFinite(id) && id > 0);
+  if (!ids.length) return { error: "Seleccioná al menos una solicitud." };
+  const deleted = await deleteApplications(ids);
+  await logAudit({
+    actorEmail: actorUser.email,
+    action: "application.delete.bulk",
+    entityType: "application",
+    detail: `Eliminó ${deleted} solicitud${deleted === 1 ? "" : "es"}`,
+  });
+  refresh();
+  return { ok: true as const, deleted };
+}
+
 export async function createUserFromApplicationAction(formData: FormData) {
   const actorUser = await actor();
   const id = Number(formData.get("id"));
@@ -744,6 +764,24 @@ export async function deletePadronEntryAction(formData: FormData) {
   });
   refresh();
   return { ok: true };
+}
+
+export async function deletePadronEntriesAction(formData: FormData) {
+  const actorUser = await actor();
+  const ids = text(formData, "ids")
+    .split(",")
+    .map((value) => Number(value))
+    .filter((id) => Number.isFinite(id) && id > 0);
+  if (!ids.length) return { error: "Seleccioná al menos un registro." };
+  const deleted = await deletePadronEntries(ids);
+  await logAudit({
+    actorEmail: actorUser.email,
+    action: "padron.delete.bulk",
+    entityType: "padron",
+    detail: `Eliminó ${deleted} registro${deleted === 1 ? "" : "s"} del padrón`,
+  });
+  refresh();
+  return { ok: true as const, deleted };
 }
 
 export async function importPadronAction(formData: FormData) {
@@ -1146,7 +1184,7 @@ export async function createActivationAction(formData: FormData) {
     action: "activation.create",
     entityType: "activation",
     entityId: entry.id,
-    detail: `Agregó la activación ${entry.title}`,
+    detail: `Agregó el encuentro ${entry.title}`,
   });
   refresh();
   return { ok: true };
@@ -1156,20 +1194,20 @@ export async function updateActivationAction(formData: FormData) {
   const actorUser = await actor();
   const id = Number(formData.get("id"));
   const input = activationFromForm(formData);
-  if (!id) return { error: "Activación inválida." };
+  if (!id) return { error: "Encuentro inválido." };
   if (!input.youtubeUrl || !isYouTubeUrl(input.youtubeUrl)) {
     return { error: "Pegá una URL de YouTube válida." };
   }
   if (!input.title) return { error: "Completá el título." };
   if (!input.occurredAt) return { error: "Completá la fecha." };
   const entry = await updateActivation(id, input);
-  if (!entry) return { error: "No se encontró la activación." };
+  if (!entry) return { error: "No se encontró el encuentro." };
   await logAudit({
     actorEmail: actorUser.email,
     action: "activation.update",
     entityType: "activation",
     entityId: id,
-    detail: `Actualizó la activación ${entry.title}`,
+    detail: `Actualizó el encuentro ${entry.title}`,
   });
   refresh();
   return { ok: true };
@@ -1178,15 +1216,15 @@ export async function updateActivationAction(formData: FormData) {
 export async function toggleActivationAction(formData: FormData) {
   const actorUser = await actor();
   const id = Number(formData.get("id"));
-  if (!id) return { error: "Activación inválida." };
+  if (!id) return { error: "Encuentro inválido." };
   const entry = await toggleActivation(id);
-  if (!entry) return { error: "No se encontró la activación." };
+  if (!entry) return { error: "No se encontró el encuentro." };
   await logAudit({
     actorEmail: actorUser.email,
     action: "activation.toggle",
     entityType: "activation",
     entityId: id,
-    detail: `${entry.enabled ? "Habilitó" : "Ocultó"} la activación ${entry.title}`,
+    detail: `${entry.enabled ? "Habilitó" : "Ocultó"} el encuentro ${entry.title}`,
   });
   refresh();
   return { ok: true };
@@ -1195,14 +1233,14 @@ export async function toggleActivationAction(formData: FormData) {
 export async function deleteActivationAction(formData: FormData) {
   const actorUser = await actor();
   const id = Number(formData.get("id"));
-  if (!id) return { error: "Activación inválida." };
+  if (!id) return { error: "Encuentro inválido." };
   await deleteActivation(id);
   await logAudit({
     actorEmail: actorUser.email,
     action: "activation.delete",
     entityType: "activation",
     entityId: id,
-    detail: "Eliminó una activación",
+    detail: "Eliminó un encuentro",
   });
   refresh();
   return { ok: true };
@@ -1225,7 +1263,7 @@ export async function saveActivationPermissionsAction(formData: FormData) {
     action: "activation.permissions",
     entityType: "user",
     entityId: userId,
-    detail: `Actualizó permisos de Activaciones: ${activationIds.length} videos`,
+    detail: `Actualizó permisos de Encuentros: ${activationIds.length} videos`,
   });
   refresh();
   return { ok: true };

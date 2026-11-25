@@ -10,5 +10,5 @@ export function IngresarClient() {
     openLogin();
   }, [openLogin]);
 
-  return <section className="min-h-screen bg-background" />;
+  return <section className="min-h-screen" />;
 }

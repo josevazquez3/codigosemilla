@@ -95,9 +95,9 @@ export const panelNav: PanelNavItem[] = [
   },
   {
     href: "/panel/activaciones",
-    label: "Activaciones",
+    label: "Encuentros",
     icon: "sparkles",
-    description: "Biblioteca de activaciones y grabaciones.",
+    description: "Biblioteca de encuentros y grabaciones.",
   },
   {
     href: "/panel/sala-especial",
@@ -109,7 +109,7 @@ export const panelNav: PanelNavItem[] = [
     href: "/panel/permisos-sala-especial",
     label: "Permisos Sala Especial",
     icon: "lock",
-    description: "Habilitá videos de Activaciones a Usuarios Membresía, por padrón.",
+    description: "Habilitá videos de Encuentros a Usuarios Membresía, por padrón.",
   },
   {
     href: "/panel/quiero-unirme",
@@ -133,31 +133,6 @@ export const panelNav: PanelNavItem[] = [
         label: "Historial Consultas",
         description: "Consultas respondidas del formulario de Contacto.",
         icon: "history",
-      },
-    ],
-  },
-  {
-    href: "/panel/encuentros-seminarios",
-    label: "Configuración Encuentros y Seminarios",
-    icon: "calendar",
-    description: "Organizá fechas, cupos y materiales de cada encuentro.",
-  },
-  {
-    label: "Inscripción Encuentros",
-    icon: "enroll",
-    description: "Vista previa de encuentros y seminarios, y reserva de inscripción.",
-    children: [
-      {
-        href: "/panel/inscripcion-encuentros",
-        label: "Inscripción Encuentros",
-        description: "Vista previa de encuentros y seminarios, y reserva de inscripción.",
-        icon: "enroll",
-      },
-      {
-        href: "/panel/inscripcion-encuentros/inscriptos",
-        label: "Usuarios Inscriptos Encuentros",
-        description: "Listado, exportación y gestión de inscripciones a encuentros.",
-        icon: "audit",
       },
     ],
   },
@@ -242,7 +217,6 @@ const usuarioPaths = [
   "/panel/zoom",
   "/panel/bitacora",
   "/panel/activaciones",
-  "/panel/inscripcion-encuentros",
   "/panel/tesoreria/adjuntar-pago",
   "/panel/cobros/mis-suscripciones",
 ];
@@ -264,8 +238,10 @@ export function isAdminRole(role?: string | null) {
 }
 
 export function canAccessPath(role: PanelRole, path: string) {
+  if (pathMatches(path, "/panel/encuentros-seminarios") || pathMatches(path, "/panel/inscripcion-encuentros")) {
+    return false;
+  }
   if (isAdminRole(role)) return true;
-  if (path.startsWith("/panel/inscripcion-encuentros/inscriptos")) return false;
   if (pathMatches(path, "/panel/cobros") && !pathMatches(path, "/panel/cobros/mis-suscripciones")) {
     return false;
   }

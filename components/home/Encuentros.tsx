@@ -20,7 +20,7 @@ export function Encuentros({
       <div className="mx-auto max-w-6xl px-6">
         <Reveal>
           <div className="mb-12 text-center">
-            <p className="mb-4 text-xs uppercase tracking-[0.3em] text-accent">Encuentros</p>
+            <p className="mb-5 text-base font-bold uppercase tracking-[0.28em] text-[#5c3d2e] md:text-xl">Encuentros</p>
             <h2 className="font-heading text-4xl font-light md:text-5xl">
               Próximos <span className="italic">encuentros y seminarios</span>
             </h2>
@@ -43,7 +43,7 @@ export function Encuentros({
                       <img src={event.coverImageUrl} alt="" className="h-56 w-full object-cover" />
                     ) : null}
                     <div className="space-y-4 p-6">
-                      <p className="text-xs tracking-[0.2em] text-accent uppercase">
+                      <p className="text-sm font-bold tracking-[0.2em] text-[#5c3d2e] uppercase md:text-base">
                         {formatDate(event.startsAt)}
                       </p>
                       <h3 className="font-heading text-2xl text-foreground">{event.title}</h3>
@@ -51,7 +51,7 @@ export function Encuentros({
                       {open ? (
                         <Link
                           href={`/ingresar?next=${encodeURIComponent("/panel/inscripcion-encuentros")}`}
-                          className="inline-flex rounded-full bg-accent px-6 py-2.5 text-xs tracking-[0.16em] text-accent-foreground uppercase"
+                          className="inline-flex rounded-full border-2 border-[#5c3d2e] bg-accent px-6 py-2.5 text-xs tracking-[0.16em] text-accent-foreground uppercase"
                         >
                           Unirme
                         </Link>

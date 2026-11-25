@@ -1,12 +1,13 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Menu, X } from "lucide-react";
-import { navItems } from "@/lib/content";
-import { Logo } from "@/components/ui/Logo";
+import { Lock, Menu, X } from "lucide-react";
 import { useLoginModal } from "@/components/auth/LoginProvider";
+import { navItems } from "@/lib/content";
+import { images } from "@/lib/images";
 
 export function Header({ loggedIn = false }: { loggedIn?: boolean }) {
   const pathname = usePathname();
@@ -32,9 +33,17 @@ export function Header({ loggedIn = false }: { loggedIn?: boolean }) {
         solid ? "bg-primary/95 shadow-lg backdrop-blur-md" : "bg-transparent"
       }`}
     >
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
-        <Link href="/" className="relative z-10 text-primary-foreground">
-          <Logo compact />
+      <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3 md:py-4">
+        <Link href="/" className="relative z-10 shrink-0">
+          <Image
+            src={images.logo}
+            alt="Guadalupe Vázquez"
+            width={240}
+            height={240}
+            preload
+            loading="eager"
+            className="h-20 w-auto mix-blend-screen drop-shadow-[0_2px_8px_rgba(0,0,0,0.35)] md:h-24"
+          />
         </Link>
         <nav className="hidden items-center gap-1 lg:flex">
           {navItems.map((item) => {
@@ -43,13 +52,16 @@ export function Header({ loggedIn = false }: { loggedIn?: boolean }) {
               <Link
                 key={item.path}
                 href={item.path}
-                className={`relative px-3 py-2 text-base font-light tracking-wide transition-colors duration-300 xl:px-4 xl:text-lg ${
+                className={`relative inline-flex items-center gap-1.5 px-3 py-2 text-base font-light tracking-wide transition-colors duration-300 xl:px-4 xl:text-lg ${
                   active
                     ? "text-accent"
                     : "text-primary-foreground/85 hover:text-accent"
                 }`}
               >
                 {item.label}
+                {item.path === "/frecuencia-44" ? (
+                  <Lock size={14} className="mb-px opacity-90" aria-hidden="true" />
+                ) : null}
                 {active ? (
                   <span className="absolute right-3 bottom-1 left-3 h-px bg-accent" />
                 ) : null}
@@ -59,7 +71,7 @@ export function Header({ loggedIn = false }: { loggedIn?: boolean }) {
           {loggedIn ? (
             <Link
               href="/panel"
-              className="ml-3 rounded-full bg-accent px-5 py-2 text-sm font-medium tracking-widest text-accent-foreground uppercase transition-all hover:scale-105 hover:shadow-lg hover:shadow-accent/25 xl:px-6 xl:text-base"
+              className="ml-3 rounded-full border-2 border-[#5c3d2e] bg-accent px-5 py-2 text-sm font-medium tracking-widest text-accent-foreground uppercase transition-all hover:scale-105 hover:shadow-lg hover:shadow-accent/25 xl:px-6 xl:text-base"
             >
               Ingresar
             </Link>
@@ -67,7 +79,7 @@ export function Header({ loggedIn = false }: { loggedIn?: boolean }) {
             <button
               type="button"
               onClick={openLogin}
-              className="ml-3 rounded-full bg-accent px-5 py-2 text-sm font-medium tracking-widest text-accent-foreground uppercase transition-all hover:scale-105 hover:shadow-lg hover:shadow-accent/25 xl:px-6 xl:text-base"
+              className="ml-3 rounded-full border-2 border-[#5c3d2e] bg-accent px-5 py-2 text-sm font-medium tracking-widest text-accent-foreground uppercase transition-all hover:scale-105 hover:shadow-lg hover:shadow-accent/25 xl:px-6 xl:text-base"
             >
               Ingresar
             </button>
@@ -89,13 +101,16 @@ export function Header({ loggedIn = false }: { loggedIn?: boolean }) {
               <Link
                 key={item.path}
                 href={item.path}
-                className={`block py-2 text-2xl font-heading font-light tracking-wider ${
+                className={`inline-flex items-center gap-2 py-2 text-2xl font-heading font-light tracking-wider ${
                   pathname === item.path
                     ? "text-accent"
                     : "text-primary-foreground/80 hover:text-accent"
                 }`}
               >
                 {item.label}
+                {item.path === "/frecuencia-44" ? (
+                  <Lock size={18} className="opacity-90" aria-hidden="true" />
+                ) : null}
               </Link>
             ))}
             <div className="pt-4">
@@ -103,7 +118,7 @@ export function Header({ loggedIn = false }: { loggedIn?: boolean }) {
                 <Link
                   href="/panel"
                   onClick={() => setOpen(false)}
-                  className="inline-flex rounded-full bg-accent px-6 py-3 text-sm font-medium tracking-widest text-accent-foreground uppercase"
+                  className="inline-flex rounded-full border-2 border-[#5c3d2e] bg-accent px-6 py-3 text-sm font-medium tracking-widest text-accent-foreground uppercase"
                 >
                   Ingresar
                 </Link>
@@ -114,7 +129,7 @@ export function Header({ loggedIn = false }: { loggedIn?: boolean }) {
                     setOpen(false);
                     openLogin();
                   }}
-                  className="inline-flex rounded-full bg-accent px-6 py-3 text-sm font-medium tracking-widest text-accent-foreground uppercase"
+                  className="inline-flex rounded-full border-2 border-[#5c3d2e] bg-accent px-6 py-3 text-sm font-medium tracking-widest text-accent-foreground uppercase"
                 >
                   Ingresar
                 </button>

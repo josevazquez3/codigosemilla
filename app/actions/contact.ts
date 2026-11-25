@@ -1,10 +1,25 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { createContactInquiry } from "@/lib/panel-data";
+import { createContactInquiry, getSettings } from "@/lib/panel-data";
+import { whatsappWebUrl } from "@/lib/site-settings";
 
 function text(form: FormData, key: string) {
   return String(form.get(key) ?? "").trim();
+}
+
+function contactWhatsAppMessage(input: {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  message: string;
+  interest: string;
+}) {
+  const lines = [`Hola, soy ${input.firstName} ${input.lastName}.`];
+  if (input.interest) lines.push(`Me interesa: ${input.interest}.`);
+  lines.push("", input.message, "", `Celular: ${input.phone}`, `Email: ${input.email}`);
+  return lines.join("\n");
 }
 
 export async function submitContactInquiryAction(formData: FormData) {
@@ -31,5 +46,19 @@ export async function submitContactInquiryAction(formData: FormData) {
     interest,
   });
   revalidatePath("/panel/consultas-contactos");
-  return { ok: true };
+
+  const settings = await getSettings();
+  const whatsapp = whatsappWebUrl(
+    settings.whatsappNumber,
+    contactWhatsAppMessage({
+      firstName,
+      lastName,
+      email,
+      phone,
+      message,
+      interest,
+    }),
+  );
+
+  return { ok: true, whatsappUrl: whatsapp };
 }

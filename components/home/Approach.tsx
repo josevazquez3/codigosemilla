@@ -2,11 +2,11 @@ import { Reveal } from "@/components/ui/Reveal";
 
 export function Approach() {
   return (
-    <section className="bg-muted/30 py-24">
+    <section className="py-24">
       <div className="mx-auto max-w-6xl px-6">
         <div className="mx-auto max-w-3xl text-center">
           <Reveal>
-            <p className="mb-4 text-xs uppercase tracking-[0.3em] text-accent">
+            <p className="mb-5 text-base font-bold uppercase tracking-[0.28em] text-[#5c3d2e] md:text-xl">
               Mi forma de acompañar
             </p>
             <h2 className="mb-8 font-heading text-3xl font-light leading-tight md:text-5xl">
@@ -16,14 +16,14 @@ export function Approach() {
               </span>{" "}
               es lo que transforma la experiencia.
             </h2>
-            <div className="space-y-4 leading-relaxed text-muted-foreground">
+            <div className="space-y-5 text-xl font-normal leading-relaxed text-black md:text-2xl">
               <p>
                 Mi enfoque integra lectura del campo, canalización y conciencia
                 aplicada en la materia. Acompaño procesos orientados a ampliar
                 percepción, reconocer patrones y generar transformaciones reales
                 en la vida cotidiana.
               </p>
-              <p className="text-foreground">
+              <p>
                 Mi propósito es acompañarte a recordar quién sos y activar aquello
                 que ya vive en vos.
               </p>

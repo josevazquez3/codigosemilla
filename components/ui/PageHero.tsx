@@ -21,7 +21,7 @@ export function PageHero({ image, eyebrow, title, children }: PageHeroProps) {
           className="object-cover"
           sizes="100vw"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-primary/90 via-primary/75 to-background" />
+        <div className="absolute inset-0 bg-gradient-to-b from-primary/90 via-primary/75 to-transparent" />
       </div>
       <Sparkles count={8} />
       <div className="relative z-10 mx-auto max-w-6xl px-6 pt-32 pb-12 text-center">

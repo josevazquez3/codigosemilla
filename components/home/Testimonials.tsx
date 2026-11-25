@@ -19,13 +19,11 @@ export function Testimonials({ items }: { items: Testimonial[] }) {
   const current = items[index];
 
   return (
-    <section className="relative overflow-hidden bg-secondary py-20">
-      <div className="absolute top-0 left-0 h-px w-full bg-gradient-to-r from-transparent via-accent/50 to-transparent" />
-      <div className="absolute bottom-0 left-0 h-px w-full bg-gradient-to-r from-transparent via-accent/50 to-transparent" />
+    <section className="py-20">
       <div className="mx-auto max-w-6xl px-6">
         <div className="relative mx-auto max-w-4xl text-center">
-          <Quote className="mx-auto mb-6 h-10 w-10 text-accent/40" />
-          <div className="relative flex min-h-[180px] items-center justify-center">
+          <Quote className="mx-auto mb-6 h-12 w-12 text-black" strokeWidth={2.25} />
+          <div className="relative flex min-h-[200px] items-center justify-center">
             <AnimatePresence mode="wait">
               <motion.div
                 key={index}
@@ -35,10 +33,10 @@ export function Testimonials({ items }: { items: Testimonial[] }) {
                 transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
                 className="absolute inset-0 flex flex-col items-center justify-center"
               >
-                <p className="mb-6 font-heading text-lg leading-relaxed text-secondary-foreground/90 italic md:text-xl">
+                <p className="mb-6 font-heading text-xl font-bold leading-relaxed text-black italic md:text-2xl">
                   &ldquo;{current.text}&rdquo;
                 </p>
-                <span className="text-sm tracking-widest text-accent uppercase">
+                <span className="text-base font-bold tracking-widest text-black uppercase">
                   — {current.author}
                 </span>
               </motion.div>
@@ -50,7 +48,7 @@ export function Testimonials({ items }: { items: Testimonial[] }) {
               onClick={() =>
                 setIndex((current) => (current - 1 + items.length) % items.length)
               }
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-secondary-foreground/20 text-secondary-foreground/60 transition-all hover:border-accent hover:text-accent"
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-primary/25 text-primary/70 transition-all hover:border-primary hover:text-primary"
               aria-label="Testimonio anterior"
             >
               <ChevronLeft size={18} />
@@ -63,8 +61,8 @@ export function Testimonials({ items }: { items: Testimonial[] }) {
                   onClick={() => setIndex(itemIndex)}
                   className={`h-2 rounded-full transition-all duration-300 ${
                     itemIndex === index
-                      ? "w-6 bg-accent"
-                      : "w-2 bg-secondary-foreground/30"
+                      ? "w-6 bg-primary"
+                      : "w-2 bg-primary/30"
                   }`}
                   aria-label={`Ir al testimonio ${itemIndex + 1}`}
                 />
@@ -73,7 +71,7 @@ export function Testimonials({ items }: { items: Testimonial[] }) {
             <button
               type="button"
               onClick={() => setIndex((current) => (current + 1) % items.length)}
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-secondary-foreground/20 text-secondary-foreground/60 transition-all hover:border-accent hover:text-accent"
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-primary/25 text-primary/70 transition-all hover:border-primary hover:text-primary"
               aria-label="Testimonio siguiente"
             >
               <ChevronRight size={18} />

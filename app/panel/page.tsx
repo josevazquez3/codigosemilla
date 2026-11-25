@@ -61,7 +61,6 @@ export default async function PanelHomePage() {
 
   const summary = [
     { label: "Integrantes activos", value: stats.members },
-    { label: "Encuentros abiertos", value: stats.openEvents },
     { label: "Solicitudes pendientes", value: stats.pendingApplications },
     { label: "Cuotas pendientes", value: stats.pendingDues },
   ];
@@ -79,7 +78,7 @@ export default async function PanelHomePage() {
       </p>
 
       {isAdmin ? (
-        <div className="mt-8 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="mt-8 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
           {summary.map((item) => (
             <div
               key={item.label}

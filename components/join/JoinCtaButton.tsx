@@ -18,7 +18,7 @@ export function JoinCtaButton({
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className={`group inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-accent to-[hsl(38,85%,55%)] px-8 py-3.5 text-sm font-medium tracking-widest text-accent-foreground uppercase transition-all duration-500 hover:scale-105 hover:shadow-lg hover:shadow-accent/30 ${className}`}
+        className={`group inline-flex items-center justify-center gap-2 rounded-full border-2 border-[#5c3d2e] bg-gradient-to-r from-accent to-[hsl(38,85%,55%)] px-8 py-3.5 text-sm font-medium tracking-widest text-accent-foreground uppercase transition-all duration-500 hover:scale-105 hover:shadow-lg hover:shadow-accent/30 ${className}`}
       >
         {children}
         <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />

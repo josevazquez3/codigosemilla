@@ -15,13 +15,13 @@ export default function ContactoPage() {
       <div className="mx-auto max-w-6xl px-6">
         <Reveal>
           <div className="mb-16 text-center">
-            <p className="mb-4 text-xs uppercase tracking-[0.3em] text-accent">
+            <p className="mb-5 text-base font-bold uppercase tracking-[0.28em] text-[#5c3d2e] md:text-xl">
               Contacto
             </p>
             <h1 className="mb-4 font-heading text-5xl font-light md:text-6xl">
               Conectá con tu <span className="italic text-primary">proceso</span>
             </h1>
-            <p className="mx-auto max-w-xl text-muted-foreground">
+            <p className="mx-auto max-w-xl text-xl leading-relaxed text-black md:text-2xl">
               Escribime para consultas, para reservar tu espacio o simplemente para
               resonar.
             </p>

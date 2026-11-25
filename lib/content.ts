@@ -11,7 +11,7 @@ export const programs = [
     title: "Código Semilla",
     subtitle: "Arquitectura Viva · Transformación, Integración y Activación",
     description:
-      "Una plataforma catalizadora de procesos. 11 semanas para activar progresivamente los 13 nodos y encarnar tu código original junto a una comunidad activa.",
+      "Una plataforma catalizadora de procesos. 12 semanas para activar progresivamente los 13 nodos y encarnar tu código original junto a una comunidad activa.",
     path: "/codigo-semilla",
   },
   {
@@ -84,13 +84,13 @@ export const contactInterests = [
 
 export const codigoSemilla = {
   heroPills: [
-    "11 semanas de recorrido",
+    "12 semanas de recorrido",
     "Encuentros grupales e individuales",
     "Salas de espejos",
     "Comunidad activa durante todo el proceso",
   ],
   howItWorks: [
-    "11 semanas de recorrido",
+    "12 semanas de recorrido",
     "Encuentros grupales en vivo",
     "Encuentros individuales",
     "Salas de espejos",
@@ -239,7 +239,7 @@ export const individualExperiences: IndividualExperience[] = [
       "Grabación completa del encuentro",
       "Espacio de observación, claridad e integración",
     ],
-    precio: { ar: "$77.000 ARS", intl: "USD 85" },
+    precio: { ar: "$80.000 ARS", intl: "USD 70" },
   },
   {
     id: "carta-numerologica",
@@ -260,7 +260,7 @@ export const individualExperiences: IndividualExperience[] = [
       "Grabación completa para integración posterior",
       "Espacio de observación, claridad e integración",
     ],
-    precio: { ar: "$90.000 ARS", intl: "USD 99" },
+    precio: { ar: "Consultar", intl: "Consultar" },
   },
   {
     id: "ciclo-solar",
@@ -281,7 +281,7 @@ export const individualExperiences: IndividualExperience[] = [
       "Entrega de síntesis viva por escrito",
       "Grabación completa de cada encuentro",
     ],
-    precio: { ar: "$210.000 ARS", intl: "USD 230" },
+    precio: { ar: "Consultar", intl: "Consultar" },
   },
   {
     id: "iniciacion-akashica",

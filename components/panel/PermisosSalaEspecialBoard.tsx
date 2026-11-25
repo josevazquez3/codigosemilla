@@ -70,7 +70,7 @@ export function PermisosSalaEspecialBoard({
             Permisos Sala Especial
           </h1>
           <p className="mt-2 text-sm text-primary/80">
-            Habilitá videos de Activaciones a Usuarios Membresía (checklist por rol).
+            Habilitá videos de Encuentros a Usuarios Membresía (checklist por rol).
           </p>
         </div>
       </div>
@@ -150,7 +150,7 @@ export function PermisosSalaEspecialBoard({
 
           {videos.length === 0 ? (
             <p className="mt-8 text-sm text-[#6f8a74]">
-              Todavía no hay videos en Activaciones para asignar.
+              Todavía no hay videos en Encuentros para asignar.
             </p>
           ) : (
             <div className="mt-6 grid gap-3 md:grid-cols-2">
@@ -170,7 +170,7 @@ export function PermisosSalaEspecialBoard({
                     <span>
                       <span className="block font-medium text-primary uppercase">{item.title}</span>
                       <span className="mt-1 block text-[11px] tracking-[0.14em] text-[#6f8a74] uppercase">
-                        Activación · {formatDay(item.occurredAt)}
+                        Encuentro · {formatDay(item.occurredAt)}
                       </span>
                     </span>
                   </label>

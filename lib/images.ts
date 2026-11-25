@@ -1,8 +1,10 @@
 const DEFAULT_IMAGES = {
-  portrait: "/images/portrait.jpeg",
+  portrait: "/images/portrait-guada.jpg",
   inspo1: "/images/inspo-1.jpeg",
   inspo2: "/images/inspo-2.jpeg",
   logo: "/images/logo-white.png",
+  leaves: "/images/leaves.png",
+  portraitForest: "/images/portrait-forest.jpg",
 } as const;
 
 function blobUrl(fileName: string) {
@@ -22,10 +24,12 @@ function siteUrl() {
 }
 
 export const images = {
-  portrait: blobUrl("portrait.jpeg") ?? DEFAULT_IMAGES.portrait,
+  portrait: blobUrl("portrait-guada.jpg") ?? DEFAULT_IMAGES.portrait,
   inspo1: blobUrl("inspo-1.jpeg") ?? DEFAULT_IMAGES.inspo1,
   inspo2: blobUrl("inspo-2.jpeg") ?? DEFAULT_IMAGES.inspo2,
   logo: blobUrl("logo-white.png") ?? DEFAULT_IMAGES.logo,
+  leaves: blobUrl("leaves.png") ?? DEFAULT_IMAGES.leaves,
+  portraitForest: blobUrl("portrait-forest.jpg") ?? DEFAULT_IMAGES.portraitForest,
 };
 
 export const site = {

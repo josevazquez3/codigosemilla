@@ -2138,6 +2138,22 @@ export async function deleteApplication(id: number) {
   await sql`DELETE FROM panel_applications WHERE id = ${id}`;
 }
 
+export async function deleteApplications(ids: number[]) {
+  const unique = [...new Set(ids.filter((id) => Number.isFinite(id) && id > 0))];
+  if (!unique.length) return 0;
+  const sql = getSql();
+  if (!sql) {
+    const before = memory().applications.length;
+    memory().applications = memory().applications.filter((item) => !unique.includes(item.id));
+    return before - memory().applications.length;
+  }
+  await ensurePanelSchema();
+  for (const id of unique) {
+    await sql`DELETE FROM panel_applications WHERE id = ${id}`;
+  }
+  return unique.length;
+}
+
 export async function updateApplicationStatus(id: number, status: ApplicationStatus) {
   const sql = getSql();
   if (!sql) {
@@ -2629,6 +2645,22 @@ export async function deletePadronEntry(id: number) {
   }
   await ensurePanelSchema();
   await sql`DELETE FROM panel_padron WHERE id = ${id}`;
+}
+
+export async function deletePadronEntries(ids: number[]) {
+  const unique = [...new Set(ids.filter((id) => Number.isFinite(id) && id > 0))];
+  if (!unique.length) return 0;
+  const sql = getSql();
+  if (!sql) {
+    const before = memory().padron.length;
+    memory().padron = memory().padron.filter((item) => !unique.includes(item.id));
+    return before - memory().padron.length;
+  }
+  await ensurePanelSchema();
+  for (const id of unique) {
+    await sql`DELETE FROM panel_padron WHERE id = ${id}`;
+  }
+  return unique.length;
 }
 
 export async function findPadronByEmail(email: string) {

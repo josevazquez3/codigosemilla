@@ -1,8 +1,8 @@
+import Image from "next/image";
 import Link from "next/link";
 import { Mail } from "lucide-react";
-import { Logo } from "@/components/ui/Logo";
 import { WhatsAppIcon } from "@/components/ui/WhatsAppIcon";
-import { site } from "@/lib/images";
+import { images, site } from "@/lib/images";
 import { getSettings } from "@/lib/panel-data";
 import { whatsappUrl } from "@/lib/site-settings";
 
@@ -23,7 +23,15 @@ export async function Footer() {
       <div className="mx-auto max-w-6xl px-6 py-16">
         <div className="grid gap-12 md:grid-cols-3">
           <div className="space-y-4">
-            <Logo className="items-start text-primary-foreground" />
+            <Link href="/" className="inline-block">
+              <Image
+                src={images.logo}
+                alt="Guadalupe Vázquez"
+                width={240}
+                height={240}
+                className="h-20 w-auto mix-blend-screen drop-shadow-[0_2px_8px_rgba(0,0,0,0.35)]"
+              />
+            </Link>
             <p className="max-w-xs text-sm leading-relaxed text-primary-foreground/70">
               Ser puente sagrado. Acompañar a que lo sutil se traduzca en la materia.
             </p>

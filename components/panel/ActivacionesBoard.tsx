@@ -65,8 +65,8 @@ export function ActivacionesBoard({
             <Sparkles size={26} />
           </div>
           <div>
-            <h1 className="font-heading text-4xl text-primary uppercase md:text-5xl">Activaciones</h1>
-            <p className="mt-2 text-sm text-primary/80">Biblioteca de activaciones y grabaciones</p>
+            <h1 className="font-heading text-4xl text-primary uppercase md:text-5xl">Encuentros</h1>
+            <p className="mt-2 text-sm text-primary/80">Biblioteca de encuentros y grabaciones</p>
           </div>
         </div>
       </div>
@@ -89,7 +89,7 @@ export function ActivacionesBoard({
             className="inline-flex items-center gap-2 rounded-full bg-[#4f7a58] px-5 py-3 text-[11px] tracking-[0.14em] text-white uppercase hover:bg-[#2d4739]"
           >
             <Plus size={16} />
-            Agregar activación
+            Agregar encuentro
           </button>
         ) : null}
       </div>
@@ -98,16 +98,16 @@ export function ActivacionesBoard({
         <div className="rounded-3xl border border-[#d7e6d3] bg-white px-6 py-16 text-center text-sm text-[#6f8a74] shadow-sm shadow-primary/5">
           {activations.length === 0 ? (
             <>
-              <p>Todavía no hay activaciones en la biblioteca.</p>
+              <p>Todavía no hay encuentros en la biblioteca.</p>
               {canManage ? (
                 <p className="mt-1">
-                  Usá <strong className="font-medium text-primary">Agregar activación</strong> para
-                  cargar la primera.
+                  Usá <strong className="font-medium text-primary">Agregar encuentro</strong> para
+                  cargar el primero.
                 </p>
               ) : null}
             </>
           ) : (
-            <p>No hay activaciones que coincidan con la búsqueda.</p>
+            <p>No hay encuentros que coincidan con la búsqueda.</p>
           )}
         </div>
       ) : (
@@ -202,7 +202,7 @@ export function ActivacionesBoard({
                         </form>
                         <form
                           action={async (formData) => {
-                            if (!window.confirm(`¿Eliminar la activación ${item.title}?`)) return;
+                            if (!window.confirm(`¿Eliminar el encuentro ${item.title}?`)) return;
                             await deleteActivationAction(formData);
                           }}
                         >

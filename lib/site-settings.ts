@@ -70,6 +70,12 @@ export function whatsappUrl(phone: string, message: string) {
   return `https://wa.me/${digits}?text=${encodeURIComponent(message)}`;
 }
 
+export function whatsappWebUrl(phone: string, message: string) {
+  const digits = phone.replace(/\D/g, "");
+  if (!digits) return "";
+  return `https://web.whatsapp.com/send?phone=${digits}&text=${encodeURIComponent(message)}`;
+}
+
 export function formatBankDetails(settings: SiteSettings) {
   const lines = [`Datos para transferencia – ${settings.spaceName}:`];
   if (settings.bankHolder) lines.push(`Titular: ${settings.bankHolder}`);

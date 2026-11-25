@@ -69,7 +69,7 @@ export function ActivacionModal({
         <div className="px-6 pt-6">
           <div className="flex items-start justify-between gap-4">
             <h2 className="font-heading text-3xl text-primary uppercase">
-              {activation ? "Editar activación" : "Agregar activación"}
+              {activation ? "Editar encuentro" : "Agregar encuentro"}
             </h2>
             <button type="button" onClick={onClose} className="text-[#6f8a74] hover:text-primary" aria-label="Cerrar">
               <X size={18} />
@@ -125,7 +125,7 @@ export function ActivacionModal({
             disabled={pending}
             className="rounded-full bg-[#4f7a58] px-5 py-2.5 text-xs tracking-[0.16em] text-white uppercase hover:bg-[#2d4739] disabled:opacity-70"
           >
-            {pending ? "Guardando..." : "Guardar activación"}
+            {pending ? "Guardando..." : "Guardar encuentro"}
           </button>
         </div>
       </form>

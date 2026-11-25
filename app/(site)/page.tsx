@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { AboutIntro } from "@/components/home/AboutIntro";
 import { Approach } from "@/components/home/Approach";
 import { Bio } from "@/components/home/Bio";
-import { Encuentros } from "@/components/home/Encuentros";
 import { Essence } from "@/components/home/Essence";
 import { FinalCta } from "@/components/home/FinalCta";
 import { Hero } from "@/components/home/Hero";
@@ -11,7 +10,6 @@ import { Testimonials } from "@/components/home/Testimonials";
 import { FaqAccordion } from "@/components/ui/FaqAccordion";
 import { Reveal } from "@/components/ui/Reveal";
 import { getFaqs, getTestimonials } from "@/lib/db";
-import { listCarouselSlides, listEvents } from "@/lib/panel-data";
 
 export const metadata: Metadata = {
   title: "Guadalupe Vázquez | Guía Espiritual · Conciencia Estelar",
@@ -23,11 +21,9 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
-  const [faqItems, testimonialItems, slides, events] = await Promise.all([
+  const [faqItems, testimonialItems] = await Promise.all([
     getFaqs(),
     getTestimonials(),
-    listCarouselSlides(),
-    listEvents(),
   ]);
 
   return (
@@ -36,7 +32,6 @@ export default async function HomePage() {
       <AboutIntro />
       <Approach />
       <Programs />
-      <Encuentros slides={slides} events={events} />
       <Testimonials items={testimonialItems} />
       <Bio />
       <section className="py-24 lg:py-32">
@@ -44,7 +39,7 @@ export default async function HomePage() {
           <div className="mx-auto max-w-3xl">
             <Reveal>
               <div className="mb-12 text-center">
-                <p className="mb-4 text-xs uppercase tracking-[0.3em] text-accent">
+                <p className="mb-5 text-base font-bold uppercase tracking-[0.28em] text-[#5c3d2e] md:text-xl">
                   Preguntas frecuentes
                 </p>
                 <h2 className="font-heading text-4xl font-light md:text-5xl">

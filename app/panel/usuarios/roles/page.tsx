@@ -34,7 +34,7 @@ export default async function RolesPage() {
         <PanelCard>
           <p className="text-[11px] tracking-[0.18em] text-[#4f7a58] uppercase">Usuario Membresía</p>
           <p className="mt-2 text-sm text-primary">
-            Todo lo de Usuario, más Sala Especial y Activaciones según el checklist de
+            Todo lo de Usuario, más Sala Especial y Encuentros según el checklist de
             permisos.
           </p>
         </PanelCard>

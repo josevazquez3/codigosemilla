@@ -3,10 +3,10 @@ import { ArrowRight } from "lucide-react";
 
 const variants = {
   primary:
-    "bg-accent text-accent-foreground hover:shadow-lg hover:shadow-accent/25",
+    "border-2 border-[#5c3d2e] bg-accent text-accent-foreground hover:shadow-lg hover:shadow-accent/25",
   outline:
     "border border-accent text-accent hover:bg-accent hover:text-accent-foreground",
-  gold: "bg-gradient-to-r from-accent to-[hsl(38,85%,55%)] text-accent-foreground hover:shadow-lg hover:shadow-accent/30",
+  gold: "border-2 border-[#5c3d2e] bg-gradient-to-r from-accent to-[hsl(38,85%,55%)] text-accent-foreground hover:shadow-lg hover:shadow-accent/30",
 } as const;
 
 type ButtonLinkProps = {

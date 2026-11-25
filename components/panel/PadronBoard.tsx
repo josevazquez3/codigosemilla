@@ -15,6 +15,7 @@ import {
 import { useRouter } from "next/navigation";
 import {
   createPadronEntryAction,
+  deletePadronEntriesAction,
   deletePadronEntryAction,
   importPadronAction,
   updatePadronEntryAction,
@@ -30,6 +31,7 @@ export function PadronBoard({ people }: { people: PanelPadronPerson[] }) {
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState<Record<number, boolean>>({});
   const [drawer, setDrawer] = useState<"create" | PanelPadronPerson | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   const filtered = useMemo(() => {
     const value = query.trim().toLowerCase();
@@ -42,6 +44,8 @@ export function PadronBoard({ people }: { people: PanelPadronPerson[] }) {
   }, [people, query]);
 
   const allVisibleSelected = filtered.length > 0 && filtered.every((item) => selected[item.id]);
+  const selectedIds = people.filter((item) => selected[item.id]).map((item) => item.id);
+  const selectedCount = selectedIds.length;
 
   function exportRows() {
     const rows = filtered.filter((item) => selected[item.id]);
@@ -52,6 +56,22 @@ export function PadronBoard({ people }: { people: PanelPadronPerson[] }) {
     link.download = "padron-usuarios.csv";
     link.click();
     URL.revokeObjectURL(link.href);
+  }
+
+  async function deleteSelected() {
+    if (!selectedCount || deleting) return;
+    const label = selectedCount === 1 ? "el registro seleccionado" : `los ${selectedCount} registros seleccionados`;
+    if (!window.confirm(`¿Eliminar ${label} del padrón? Esta acción no se puede deshacer.`)) return;
+    setDeleting(true);
+    const formData = new FormData();
+    formData.set("ids", selectedIds.join(","));
+    const result = await deletePadronEntriesAction(formData);
+    setDeleting(false);
+    if (result && "error" in result && result.error) {
+      window.alert(result.error);
+      return;
+    }
+    setSelected({});
   }
 
   return (
@@ -126,6 +146,21 @@ export function PadronBoard({ people }: { people: PanelPadronPerson[] }) {
               <FileDown size={14} />
               Exportar
             </button>
+            {selectedCount > 0 ? (
+              <button
+                type="button"
+                onClick={deleteSelected}
+                disabled={deleting}
+                className="inline-flex items-center gap-2 rounded-full border border-[#7a3a34] bg-[#f8e6e4] px-4 py-2.5 text-[11px] tracking-[0.14em] text-[#7a3a34] uppercase hover:bg-[#f3d4d0] disabled:opacity-70"
+              >
+                <Trash2 size={14} />
+                {deleting
+                  ? "Eliminando..."
+                  : selectedCount === 1
+                    ? "Eliminar seleccionado"
+                    : `Eliminar seleccionados (${selectedCount})`}
+              </button>
+            ) : null}
           </div>
           <input
             ref={fileRef}

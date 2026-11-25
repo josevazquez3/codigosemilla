@@ -206,7 +206,7 @@ export function LoginModal({ open, onClose }: LoginModalProps) {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full rounded-full bg-accent py-3.5 text-sm font-medium tracking-[0.22em] text-accent-foreground uppercase transition-all hover:shadow-lg hover:shadow-accent/25 disabled:opacity-70"
+                className="w-full rounded-full border-2 border-[#5c3d2e] bg-accent py-3.5 text-sm font-medium tracking-[0.22em] text-accent-foreground uppercase transition-all hover:shadow-lg hover:shadow-accent/25 disabled:opacity-70"
               >
                 {loading ? "Ingresando..." : isLogin ? "Ingresar" : "Crear cuenta"}
               </button>

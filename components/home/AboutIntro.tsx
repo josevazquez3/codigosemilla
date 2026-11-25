@@ -16,7 +16,7 @@ export function AboutIntro() {
                   alt="Guadalupe Vázquez"
                   width={900}
                   height={1200}
-                  className="aspect-[3/4] w-full object-cover"
+                  className="aspect-[3/4] w-full object-cover object-top"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-primary/30 to-transparent" />
               </div>
@@ -26,26 +26,23 @@ export function AboutIntro() {
           </Reveal>
           <Reveal delay={0.2}>
             <div className="space-y-6">
-              <p className="text-xs uppercase tracking-[0.3em] text-accent">
-                Guadalupe Vázquez
+              <p className="text-sm font-medium uppercase tracking-[0.28em] text-[#5c3d2e] md:text-lg">
+                Guadalupe Vazquez
               </p>
               <h2 className="font-heading text-4xl font-light leading-tight md:text-5xl">
                 Soy <span className="italic text-primary">Puente Sagrado</span>
               </h2>
-              <div className="space-y-4 text-sm leading-relaxed text-muted-foreground">
+              <div className="space-y-4 text-xl font-normal leading-relaxed text-black md:text-2xl">
                 <p>
                   Acompaño procesos individuales y colectivos orientados a ampliar
                   percepción, reorganizar patrones y transformar la experiencia
                   cotidiana desde una mayor coherencia interna.
                 </p>
                 <p>
-                  Mi enfoque integra{" "}
-                  <span className="text-foreground">
-                    lectura del campo, canalización y conciencia aplicada en la
-                    materia
-                  </span>
-                  . Diseño estructuras y experiencias que permiten ordenar, activar
-                  e integrar aquello que cada persona está atravesando.
+                  Mi enfoque integra lectura del campo, canalización y conciencia
+                  aplicada en la materia. Diseño estructuras y experiencias que
+                  permiten ordenar, activar e integrar aquello que cada persona
+                  está atravesando.
                 </p>
                 <p>
                   No me interesa quedarme en lo abstracto. Me interesa que eso

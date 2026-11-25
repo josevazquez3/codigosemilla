@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, Lock } from "lucide-react";
 import { submitContactInquiryAction } from "@/app/actions/contact";
 import { contactInterests } from "@/lib/content";
 
@@ -10,6 +10,7 @@ export function ContactForm() {
   const [pending, setPending] = useState(false);
   const [sent, setSent] = useState(false);
   const [interest, setInterest] = useState("");
+  const [whatsappHref, setWhatsappHref] = useState("");
 
   if (sent) {
     return (
@@ -19,6 +20,16 @@ export function ContactForm() {
         <p className="text-muted-foreground">
           Gracias por escribirme. Te respondo a la brevedad.
         </p>
+        {whatsappHref ? (
+          <a
+            href={whatsappHref}
+            target="_blank"
+            rel="noreferrer"
+            className="mt-6 inline-flex rounded-full border-2 border-[#5c3d2e] bg-accent px-6 py-3 text-sm font-medium tracking-widest text-accent-foreground uppercase"
+          >
+            Abrir WhatsApp
+          </a>
+        ) : null}
       </div>
     );
   }
@@ -30,17 +41,29 @@ export function ContactForm() {
         setPending(true);
         setError("");
         if (interest) formData.set("interest", interest);
+        const popup = window.open("", "_blank");
         const result = await submitContactInquiryAction(formData);
         setPending(false);
         if (result?.error) {
+          popup?.close();
           setError(result.error);
           return;
+        }
+        if (result?.whatsappUrl) {
+          setWhatsappHref(result.whatsappUrl);
+          if (popup && !popup.closed) {
+            popup.location.href = result.whatsappUrl;
+          } else {
+            window.open(result.whatsappUrl, "_blank", "noopener,noreferrer");
+          }
+        } else {
+          popup?.close();
         }
         setSent(true);
       }}
     >
       <div>
-        <label className="mb-3 block text-xs tracking-[0.2em] text-muted-foreground uppercase">
+        <label className="mb-4 block text-lg font-bold tracking-[0.2em] text-black uppercase md:text-2xl">
           ¿Qué te interesa?
         </label>
         <div className="flex flex-wrap gap-2">
@@ -49,12 +72,15 @@ export function ContactForm() {
               key={item}
               type="button"
               onClick={() => setInterest(item)}
-              className={`rounded-full px-4 py-2 text-sm transition-all duration-300 ${
+              className={`inline-flex items-center gap-2 rounded-full border-2 border-[#5c3d2e] px-5 py-2.5 text-lg transition-all duration-300 md:text-xl ${
                 interest === item
                   ? "bg-accent text-accent-foreground shadow-md"
-                  : "bg-muted text-muted-foreground hover:bg-muted/80"
+                  : "bg-muted text-black hover:bg-muted/80"
               }`}
             >
+              {item === "Frecuencia 44" ? (
+                <Lock size={16} strokeWidth={1.75} aria-hidden="true" />
+              ) : null}
               {item}
             </button>
           ))}
@@ -71,11 +97,11 @@ export function ContactForm() {
           required
           rows={4}
           placeholder="Tu mensaje"
-          className="peer w-full resize-none border-b-2 border-border bg-transparent py-3 text-foreground outline-none transition-colors placeholder-transparent focus:border-accent"
+          className="peer w-full resize-none border-b-2 border-border bg-transparent py-3 text-lg text-black outline-none transition-colors placeholder-transparent focus:border-accent md:text-xl"
         />
         <label
           htmlFor="message"
-          className="absolute top-3 left-0 text-base tracking-wider text-muted-foreground transition-all peer-focus:-top-3 peer-focus:text-xs peer-[:not(:placeholder-shown)]:-top-3 peer-[:not(:placeholder-shown)]:text-xs"
+          className="absolute top-3 left-0 text-lg tracking-wider text-black transition-all peer-focus:-top-3 peer-focus:text-sm peer-[:not(:placeholder-shown)]:-top-3 peer-[:not(:placeholder-shown)]:text-sm md:text-xl"
         >
           Tu mensaje
         </label>
@@ -84,7 +110,7 @@ export function ContactForm() {
       <button
         type="submit"
         disabled={pending}
-        className="flex w-full items-center justify-center gap-3 rounded-full bg-accent py-4 text-sm font-medium tracking-widest text-accent-foreground uppercase transition-all hover:shadow-lg hover:shadow-accent/25 disabled:opacity-70"
+        className="flex w-full items-center justify-center gap-3 rounded-full border-2 border-[#5c3d2e] bg-accent py-4 text-sm font-medium tracking-widest text-accent-foreground uppercase transition-all hover:shadow-lg hover:shadow-accent/25 disabled:opacity-70"
       >
         {pending ? "Enviando..." : "Enviar consulta"}
       </button>
@@ -111,11 +137,11 @@ function FloatingField({
         type={type}
         required
         placeholder={label}
-        className="peer w-full border-b-2 border-border bg-transparent py-3 text-foreground outline-none transition-colors placeholder-transparent focus:border-accent"
+        className="peer w-full border-b-2 border-border bg-transparent py-3 text-lg text-black outline-none transition-colors placeholder-transparent focus:border-accent md:text-xl"
       />
       <label
         htmlFor={id}
-        className="absolute top-3 left-0 text-base tracking-wider text-muted-foreground transition-all peer-focus:-top-3 peer-focus:text-xs peer-[:not(:placeholder-shown)]:-top-3 peer-[:not(:placeholder-shown)]:text-xs"
+        className="absolute top-3 left-0 text-lg tracking-wider text-black transition-all peer-focus:-top-3 peer-focus:text-sm peer-[:not(:placeholder-shown)]:-top-3 peer-[:not(:placeholder-shown)]:text-sm md:text-xl"
       >
         {label}
       </label>

@@ -17,13 +17,15 @@ export function FaqAccordion({ items }: { items: FaqItem[] }) {
             <button
               type="button"
               onClick={() => setOpen(isOpen ? null : index)}
-              className={`flex w-full items-center justify-between py-6 text-left font-heading text-lg font-light md:text-xl transition-colors hover:text-accent ${
-                isOpen ? "text-accent" : ""
+              className={`group flex w-full items-center justify-between py-6 text-left font-heading text-2xl font-bold md:text-3xl transition-colors duration-300 hover:text-[#8b5724] ${
+                isOpen ? "text-[#8b5724]" : ""
               }`}
             >
-              <span>{item.q}</span>
+              <span className="origin-left transition-transform duration-300 group-hover:scale-[1.07]">
+                {item.q}
+              </span>
               <ChevronDown
-                className={`h-4 w-4 shrink-0 transition-transform duration-300 ${
+                className={`h-5 w-5 shrink-0 transition-transform duration-300 ${
                   isOpen ? "rotate-180" : ""
                 }`}
               />
@@ -33,7 +35,7 @@ export function FaqAccordion({ items }: { items: FaqItem[] }) {
                 isOpen ? "grid-rows-[1fr] pb-6" : "grid-rows-[0fr]"
               }`}
             >
-              <p className="overflow-hidden text-sm leading-relaxed text-muted-foreground">
+              <p className="overflow-hidden text-lg font-bold leading-relaxed text-muted-foreground md:text-xl">
                 {item.a}
               </p>
             </div>
